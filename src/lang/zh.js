@@ -44,7 +44,12 @@ export default {
     theme: '换肤',
     clipboardDemo: 'clipboard',
     i18n: '国际化',
-    tree: '树形菜单'
+    tree: '树形菜单',
+    wms: '仓库管理系统',
+    product: '产品管理',
+    supplier: '供应商管理',
+    purchase: '采购管理',
+    order: '订单管理'
   },
   navbar: {
     logOut: '退出登录',

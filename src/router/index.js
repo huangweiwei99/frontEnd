@@ -34,6 +34,39 @@ export const constantRouterMap = [
     }]
   },
   {
+    path: '/wms',
+    component: Layout,
+    redirect: '/example/table',
+    name: 'WMS',
+    meta: { title: 'wms', icon: 'example' },
+    children: [
+      {
+        path: 'product',
+        name: 'Product',
+        component: _import('table/index'),
+        meta: { title: 'product', icon: 'table' }
+      },
+      {
+        path: 'supplier',
+        name: 'Supplier',
+        component: _import('tree/index'),
+        meta: { title: 'supplier', icon: 'tree' }
+      },
+      {
+        path: 'purchase',
+        name: 'Purchase',
+        component: _import('table/index'),
+        meta: { title: 'purchase', icon: 'table' }
+      },
+      {
+        path: 'order',
+        name: 'Order',
+        component: _import('tree/index'),
+        meta: { title: 'order', icon: 'tree' }
+      }
+    ]
+  },
+  {
     path: '/example',
     component: Layout,
     redirect: '/example/table',
