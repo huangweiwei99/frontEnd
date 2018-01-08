@@ -44,7 +44,12 @@ export default {
     theme: 'Theme',
     clipboardDemo: 'Clipboard',
     i18n: 'I18n',
-    tree: 'Tree'
+    tree: 'Tree',
+    wms: 'WMS',
+    product: 'Product',
+    supplier: 'Supplier',
+    purchase: 'Purchase',
+    order: 'Order'
   },
   navbar: {
     logOut: 'Log Out',
