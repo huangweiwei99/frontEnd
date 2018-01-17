@@ -108,7 +108,10 @@ export default {
     draft: 'Draft',
     delete: 'Delete',
     cancel: 'Cancel',
-    confirm: 'Confirm'
+    confirm: 'Confirm',
+    idasc: 'ID Ascding',
+    iddesc: 'ID Descding',
+    loadingText: 'Give me more time'
   },
   errorLog: {
     tips: 'Please click the bug icon in the upper right corner',

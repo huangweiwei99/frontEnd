@@ -27,7 +27,7 @@ export default {
     dynamicTable: '动态table',
     dragTable: '拖拽table',
     inlineEditTable: 'table内编辑',
-    complexTable: '综合table',
+    complexTable: '综合表格',
     tab: 'Tab',
     form: '表单',
     createForm: '创建表单',
@@ -94,6 +94,8 @@ export default {
     type: '类型',
     remark: '点评',
     search: '搜索',
+    reset: '重置',
+    advance: '高级',
     add: '添加',
     export: '导出',
     reviewer: '审核人',
@@ -108,7 +110,13 @@ export default {
     draft: '草稿',
     delete: '删除',
     cancel: '取 消',
-    confirm: '确 定'
+    confirm: '确 定',
+    idasc: 'ID顺序',
+    iddesc: 'ID倒序',
+    loadingText: '给我一点时间',
+    range: '排序',
+    sortFiled: '排序域',
+    exportFileName: '文件名'
   },
   errorLog: {
     tips: '请点击右上角bug小图标',
@@ -118,7 +126,7 @@ export default {
   excel: {
     export: '导出',
     selectedExport: '导出已选择项',
-    placeholder: '请输入文件名(默认excel-list)'
+    placeholder: '请输入要导出文件名(默认excel-list)'
   },
   zip: {
     export: '导出',
@@ -133,6 +141,23 @@ export default {
     close: '关闭',
     closeothers: '关闭其他',
     closeall: '关闭所有'
+  },
+  product: {
+    name: '产品名称',
+    sku: 'SKU',
+    weight: '净重量',
+    size: '净尺寸',
+    packageWeight: '包装重量',
+    packageSize: '包装尺寸',
+    remark: '备注'
+  },
+  rule: {
+    productName: '产品名称不能空',
+    SKU: 'SKU不能为空'
+  },
+  form: {
+    create: '创建',
+    edit: '编辑'
   }
 }
 

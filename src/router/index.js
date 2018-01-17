@@ -43,7 +43,7 @@ export const constantRouterMap = [
       {
         path: 'product',
         name: 'Product',
-        component: _import('table/index'),
+        component: _import('wms/product/index'),
         meta: { title: 'product', icon: 'table' }
       },
       {
@@ -87,7 +87,6 @@ export const constantRouterMap = [
       }
     ]
   },
-
   {
     path: '/form',
     component: Layout,
@@ -97,6 +96,18 @@ export const constantRouterMap = [
         name: 'Form',
         component: _import('form/index'),
         meta: { title: 'form', icon: 'form' }
+      }
+    ]
+  },
+  {
+    path: '/complexTable',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'ComplexTable',
+        component: _import('table/complexTable'),
+        meta: { title: 'complexTable', icon: 'form' }
       }
     ]
   },
