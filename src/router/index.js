@@ -49,13 +49,13 @@ export const constantRouterMap = [
       {
         path: 'supplier',
         name: 'Supplier',
-        component: _import('tree/index'),
+        component: _import('wms/supplier/index'),
         meta: { title: 'supplier', icon: 'tree' }
       },
       {
         path: 'purchase',
         name: 'Purchase',
-        component: _import('table/index'),
+        component: _import('wms/purchase/index'),
         meta: { title: 'purchase', icon: 'table' }
       },
       {

@@ -8,19 +8,14 @@
        <div class="form-container" v-if="advanceVisable">
           <el-row :gutter="24">
               <el-form label-position="left" label-width="70px">
-                    <el-col :span="6"> 
-                      <el-form-item :label="$t('product.name')" prop="name">
-                        <el-input v-model="listQuery.name" prefix-icon="el-icon-edit"></el-input>
+                    <el-col :span="9"> 
+                      <el-form-item :label="$t('purchase.date')" prop="name">
+                        <el-input v-model="listQuery.date" prefix-icon="el-icon-edit"></el-input>
                       </el-form-item>
                     </el-col>
-                    <el-col :span="6"> 
-                      <el-form-item :label="$t('product.sku')" prop="sku">
-                        <el-input v-model="listQuery.sku" prefix-icon="el-icon-tickets"></el-input>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="6"> 
-                      <el-form-item :label="$t('product.packageWeight')" prop="packageWeight">
-                        <el-input v-model="listQuery.packageWeight" prefix-icon="el-icon-remove-outline"></el-input>
+                    <el-col :span="9"> 
+                      <el-form-item :label="$t('purchase.purchasetransid')" prop="packageWeight">
+                        <el-input v-model="listQuery.purchasetransid" prefix-icon="el-icon-remove-outline"></el-input>
                       </el-form-item>
                     </el-col>
                     <el-col :span="6"> 
@@ -35,18 +30,14 @@
           </el-row>
           <el-row :gutter="24">
             <el-form label-position="left" label-width="70px">
-                    <el-col :span="12"> 
-                      <el-form-item :label="$t('table.sortFiled')" prop="packageWeight">
-                        <el-select style="width: 140px" class="filter-item" v-model="listQuery.sort">          
-                            <el-option key="name" :label="$t('product.name')" value="name"></el-option>
-                            <el-option key="sku" :label="$t('product.sku')" value="sku"></el-option>
-                            <el-option key="packageWeight" :label="$t('product.packageWeight')" value="packageWeight"></el-option>
-                        </el-select>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="6"> 
-                      
-                    </el-col>
+               <el-col :span="12">
+                  <el-form-item :label="$t('table.sortFiled')" prop="packageWeight">
+                      <el-select style="width: 140px" class="filter-item" v-model="listQuery.sort">          
+                        <el-option key="date" :label="$t('purchase.date')" value="date"></el-option>
+                        <el-option key="purchasetransid" :label="$t('purchase.purchasetransid')" value="purchasetransid"></el-option>
+                      </el-select>
+                  </el-form-item>
+                </el-col>
             </el-form>
             <el-col :span="6">
                 <span style="display: inline-block;padding-right: 10px;position:absolute;right:0px;">
@@ -57,14 +48,11 @@
           </el-row>
           <el-row :gutter="24">
             <el-form label-position="left" label-width="70px">
-                    <el-col :span="12"> 
-                      <el-form-item :label="$t('table.exportFileName')" prop="packageWeight">
-                         <el-input style='width:340px;' :placeholder="$t('excel.placeholder')" prefix-icon="el-icon-document" v-model="filename"></el-input>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="6"> 
-                      
-                    </el-col>
+              <el-col :span="12"> 
+                <el-form-item :label="$t('table.exportFileName')" prop="packageWeight">
+                  <el-input style='width:340px;' :placeholder="$t('excel.placeholder')" prefix-icon="el-icon-document" v-model="filename"></el-input>
+                </el-form-item>
+              </el-col>
             </el-form>
             <el-col :span="6">
                 <span style="display: inline-block;padding-right: 10px;position:absolute;right:0px;">
@@ -80,24 +68,14 @@
     <el-table :key='tableKey' :data="list" v-loading="listLoading" :element-loading-text="$t('table.loadingText')" border fit highlight-current-row
      @selection-change="handleSelectionChange" style="width: 100%">
       <el-table-column type="selection" align="center"></el-table-column>
-      <el-table-column width="110px" align="center" :label="$t('product.sku')">
+      <el-table-column width="200px" align="center" :label="$t('purchase.date')">
         <template slot-scope="scope">
-          <span>{{scope.row.sku}}</span>
+          <span>{{scope.row.date | parseTime('{y}-{m}-{d}')}}</span>
         </template>
       </el-table-column>
-      <el-table-column min-width="365px" align="center" :label="$t('product.name')">
+      <el-table-column min-width="365px" align="center" :label="$t('purchase.purchasetransid')">
         <template slot-scope="scope">
-          <span class="link-type" @click="handleUpdate(scope.row)">{{scope.row.name}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column width="80px" align="center" :label="$t('product.packageWeight')">
-        <template slot-scope="scope">
-          <span>{{scope.row.packageWeight}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" :label="$t('product.packageSize')" width="95">
-         <template slot-scope="scope">
-          <span>{{scope.row.packageSize}}</span>
+          <span class="link-type" @click="handleUpdate(scope.row)">{{scope.row.purchasetransid}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" :label="$t('table.actions')" width="150" class-name="small-padding fixed-width">
@@ -118,39 +96,31 @@
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" :before-close="cancelData">
       <template>
         <el-tabs v-model="activeName">
-          <el-tab-pane label="产品信息" name="first">
+          <el-tab-pane label="采购信息" name="first">
             <el-form  :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="80px" style='width: 400px; margin-left:50px;'>
-              <el-form-item :label="$t('table.title')" prop="name">
-                <el-input v-model="temp.name" prefix-icon="el-icon-edit"></el-input>
+              <el-form-item :label="$t('purchase.date')" prop="date">
+                <el-date-picker v-model="temp.date" type="datetime" prefix-icon="el-icon-edit"></el-date-picker>
               </el-form-item>
-              <el-form-item :label="$t('product.sku')" prop="sku">
-                <el-input v-model="temp.sku" prefix-icon="el-icon-tickets"></el-input>
-              </el-form-item>
-              <el-form-item :label="$t('product.packageWeight')" prop="packageWeight">
-                <el-input v-model="temp.packageWeight" prefix-icon="el-icon-remove-outline"></el-input>
-              </el-form-item>
-              <el-form-item :label="$t('product.packageSize')" prop="packageSize">
-                <el-input v-model="temp.packageSize" prefix-icon="el-icon-message"></el-input>
-              </el-form-item>
-              <el-form-item :label="$t('product.remark')">
-                <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="temp.remark">
-                </el-input>
+              <el-form-item :label="$t('purchase.purchasetransid')" prop="purchasetransid">
+                <el-input v-model="temp.purchasetransid" prefix-icon="el-icon-tickets"></el-input>
               </el-form-item>
             </el-form>
           </el-tab-pane>
-          <el-tab-pane label="产品图片" name="second">
-            <el-upload ref="upload"
-              action="https://jsonplaceholder.typicode.com/posts/"
-              list-type="picture-card"
-              :on-preview="handlePictureCardPreview"
-              :on-remove="handleRemove"
-              :file-list="fileList"
-              >
-              <i class="el-icon-plus"></i>
-            </el-upload>
-            <el-dialog :visible.sync="dialogVisible" append-to-body>
-              <img width="100%" :src="dialogImageUrl" alt="">
-            </el-dialog>
+          <el-tab-pane label="采购信息" name="second">
+            <el-form label-position="left" label-width="70px">
+              <el-form-item :label="$t('table.sortFiled')" prop="packageWeight">
+                  <el-select style="width: 140px" class="filter-item" v-model="listQuery.sort">          
+                    <el-option key="date" :label="$t('purchase.date')" value="date"></el-option>
+                    <el-option key="purchasetransid" :label="$t('purchase.purchasetransid')" value="purchasetransid"></el-option>
+                  </el-select>
+              </el-form-item>
+              <el-form-item :label="$t('table.sortFiled')" prop="packageWeight">
+                  <el-select style="width: 140px" class="filter-item" v-model="listQuery.sort">          
+                    <el-option key="date" :label="$t('purchase.date')" value="date"></el-option>
+                    <el-option key="purchasetransid" :label="$t('purchase.purchasetransid')" value="purchasetransid"></el-option>
+                  </el-select>
+              </el-form-item>
+            </el-form>
           </el-tab-pane>
         </el-tabs>
       </template>
@@ -164,53 +134,24 @@
 </template>
 
 <script>
-import { fetchList, createProduct, updateProduct } from '@/api/product'
+import { fetchList, createPurchase, updatePurchase } from '@/api/purchase'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 import XLSX from 'xlsx'
 
 export default {
-  name: 'productTable',
+  name: 'purchaseTable',
   directives: {
     waves
   },
   data() {
-    var checkSku = (rule, value, callback) => {
+    var checkPurchaseTransId = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error('SKU不能为空'))
-      } else if (value.length !== 6) {
-        return callback(new Error('SKU长度为6位'))
-      } else if (!/^[A]{1}[0-9]{5}$/.test(value)) {
-        return callback(new Error('SKU模式错误，格式：A00000'))
-      } else {
-        callback()
-      }
-    }
-    var checkName = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error('产品名称不能为空'))
-      } else if (value.length < 2) {
-        return callback(new Error('产品名称至少两个字符'))
-      } else if (value.length > 100) {
-        return callback(new Error('产品名称最多100个字符'))
-      } else {
-        callback()
-      }
-    }
-    var checkPackageWeight = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error('包装重量不能为空'))
+        return callback(new Error('交易号不能为空'))
+      } else if (value.length !== 10) {
+        return callback(new Error('交易号长度为6位'))
       } else if (!/^\d+$/.test(value)) {
-        return callback(new Error('包装重量为整数'))
-      } else {
-        callback()
-      }
-    }
-    var checkPackageSize = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error('包装尺寸不能为空'))
-      } else if (!/^[\d+]{1,4}[*][\d+]{1,4}[*][\d+]{1,4}$/.test(value)) {
-        return callback(new Error('包装尺寸错误，请输入1111*2222*3333'))
+        return callback(new Error('只能输入数字'))
       } else {
         callback()
       }
@@ -227,18 +168,14 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        name: undefined,
-        sort: 'sku',
+        purchasetransid: undefined,
+        sort: 'purchasetransid',
         range: 'asc'
       },
       temp: {
         id: undefined,
-        remark: '',
-        timestamp: new Date(),
-        name: '',
-        sku: '',
-        packageWeight: '',
-        packgeSize: ''
+        date: new Date(),
+        purchasetransid: ''
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -248,10 +185,7 @@ export default {
       },
       advanceVisable: false,
       rules: {
-        name: [{ required: true, validator: checkName, trigger: 'blur' }],
-        sku: [{ required: true, validator: checkSku, trigger: 'blur' }],
-        packageWeight: [{ required: true, validator: checkPackageWeight, trigger: 'blur' }],
-        packageSize: [{ required: true, validator: checkPackageSize, trigger: 'blur' }]
+        purchasetransid: [{ required: true, validator: checkPurchaseTransId, trigger: 'blur' }]
       },
       downloadLoading: false,
       multipleSelection: [],
@@ -307,7 +241,7 @@ export default {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          createProduct(this.temp).then(() => {
+          createPurchase(this.temp).then(() => {
             this.list.unshift(this.temp)
             this.dialogFormVisible = false
             this.$notify({
@@ -336,7 +270,7 @@ export default {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
           tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateProduct(tempData).then(() => {
+          updatePurchase(tempData).then(() => {
             for (const v of this.list) {
               if (v.id === this.temp.id) {
                 const index = this.list.indexOf(v)
@@ -376,9 +310,8 @@ export default {
     },
     handleAdvanceReset() {
       this.listQuery.page = 1
-      this.listQuery.sku = null
-      this.listQuery.name = null
-      this.listQuery.packageWeight = null
+      this.listQuery.purchasetransid = null
+      this.listQuery.date = null
       this.listQuery.range = 'asc'
       this.listQuery.sort = 'id'
       this.getList()
@@ -445,8 +378,8 @@ export default {
       if (this.multipleSelection.length) {
         this.downloadLoading = true
         import('@/vendor/Export2Excel').then(excel => {
-          const tHeader = ['sku', 'name', 'packageWeight', 'packageSize']
-          const filterVal = ['sku', 'name', 'packageWeight', 'packageSize']
+          const tHeader = ['sku', 'purchasetransid']
+          const filterVal = ['sku', 'purchasetransid']
           const list = this.multipleSelection
           const data = this.formatJson(filterVal, list)
           excel.export_json_to_excel(tHeader, data, this.filename)
@@ -455,8 +388,8 @@ export default {
       } else {
         this.downloadLoading = true
         import('@/vendor/Export2Excel').then(excel => {
-          const tHeader = ['sku', 'name', 'packageWeight', 'packageSize']
-          const filterVal = ['sku', 'name', 'packageWeight', 'packageSize']
+          const tHeader = ['date', 'purchasetransid']
+          const filterVal = ['date', 'purchasetransid']
           const data = this.formatJson(filterVal, this.list)
           excel.export_json_to_excel(tHeader, data, this.filename)
           this.downloadLoading = false
@@ -465,7 +398,7 @@ export default {
     },
     formatJson(filterVal, jsonData) {
       return jsonData.map(v => filterVal.map(j => {
-        if (j === 'timestamp') {
+        if (j === 'date') {
           return parseTime(v[j])
         } else {
           return v[j]

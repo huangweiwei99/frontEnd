@@ -151,6 +151,15 @@ export default {
     packageSize: '包装尺寸',
     remark: '备注'
   },
+  supplier: {
+    name: '供应商',
+    platform: '平台',
+    address: '地址'
+  },
+  purchase: {
+    date: '采购日期',
+    purchasetransid: '交易号'
+  },
   rule: {
     productName: '产品名称不能空',
     SKU: 'SKU不能为空'
