@@ -1,96 +1,114 @@
 <template>
   <div class="app-container calendar-list-container">
-    <div class="filter-container">
-      <el-button class="filter-item" icon="el-icon-edit" @click="handleCreate">{{$t('table.add')}}</el-button>
-        <span class="right">
-          <el-button class="filter-item" icon="el-icon-search" @click="handleAdanceToggle">{{$t('table.advance')}}</el-button>
-        </span>
-       <div class="form-container" v-if="advanceVisable">
-          <el-row :gutter="24">
+    <div class="base" v-if="baseVisible">
+      <div class="filter-container">
+        <el-button class="filter-item" icon="el-icon-edit" @click="handleCreate">{{$t('table.add')}}</el-button>
+          <span class="right">
+            <el-button class="filter-item" icon="el-icon-search" @click="handleAdanceToggle">{{$t('table.advance')}}</el-button>
+          </span>
+        <div class="form-container" v-if="advanceVisable">
+            <el-row :gutter="24">
+                <el-form label-position="left" label-width="70px">
+                      <el-col :span="9"> 
+                        <el-form-item :label="$t('purchase.date')" prop="name">
+                          <el-input v-model="listQuery.date" prefix-icon="el-icon-edit"></el-input>
+                        </el-form-item>
+                      </el-col>
+                      <el-col :span="9"> 
+                        <el-form-item :label="$t('purchase.purchasetransid')" prop="packageWeight">
+                          <el-input v-model="listQuery.purchasetransid" prefix-icon="el-icon-remove-outline"></el-input>
+                        </el-form-item>
+                      </el-col>
+                      <el-col :span="6"> 
+                        <el-form-item>
+                          <el-radio-group v-model="listQuery.range">
+                            <el-radio label="desc">倒序</el-radio>
+                            <el-radio label="asc">顺序</el-radio>
+                          </el-radio-group>
+                        </el-form-item>
+                      </el-col>
+                </el-form>
+            </el-row>
+            <el-row :gutter="24">
               <el-form label-position="left" label-width="70px">
-                    <el-col :span="9"> 
-                      <el-form-item :label="$t('purchase.date')" prop="name">
-                        <el-input v-model="listQuery.date" prefix-icon="el-icon-edit"></el-input>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="9"> 
-                      <el-form-item :label="$t('purchase.purchasetransid')" prop="packageWeight">
-                        <el-input v-model="listQuery.purchasetransid" prefix-icon="el-icon-remove-outline"></el-input>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="6"> 
-                      <el-form-item>
-                        <el-radio-group v-model="listQuery.range">
-                          <el-radio label="desc">倒序</el-radio>
-                          <el-radio label="asc">顺序</el-radio>
-                        </el-radio-group>
-                      </el-form-item>
-                    </el-col>
+                <el-col :span="12">
+                    <el-form-item :label="$t('table.sortFiled')" prop="packageWeight">
+                        <el-select style="width: 140px" class="filter-item" v-model="listQuery.sort">          
+                          <el-option key="date" :label="$t('purchase.date')" value="date"></el-option>
+                          <el-option key="purchasetransid" :label="$t('purchase.purchasetransid')" value="purchasetransid"></el-option>
+                        </el-select>
+                    </el-form-item>
+                  </el-col>
               </el-form>
-          </el-row>
-          <el-row :gutter="24">
-            <el-form label-position="left" label-width="70px">
-               <el-col :span="12">
-                  <el-form-item :label="$t('table.sortFiled')" prop="packageWeight">
-                      <el-select style="width: 140px" class="filter-item" v-model="listQuery.sort">          
-                        <el-option key="date" :label="$t('purchase.date')" value="date"></el-option>
-                        <el-option key="purchasetransid" :label="$t('purchase.purchasetransid')" value="purchasetransid"></el-option>
-                      </el-select>
+              <el-col :span="6">
+                  <span style="display: inline-block;padding-right: 10px;position:absolute;right:0px;">
+                    <el-button type="primary" icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>
+                    <el-button type="danger" icon="el-icon-refresh" @click="handleAdvanceReset">{{$t('table.reset')}}</el-button>
+                  </span>
+                </el-col>
+            </el-row>
+            <el-row :gutter="24">
+              <el-form label-position="left" label-width="70px">
+                <el-col :span="12"> 
+                  <el-form-item :label="$t('table.exportFileName')" prop="packageWeight">
+                    <el-input style='width:340px;' :placeholder="$t('excel.placeholder')" prefix-icon="el-icon-document" v-model="filename"></el-input>
                   </el-form-item>
                 </el-col>
-            </el-form>
-            <el-col :span="6">
-                <span style="display: inline-block;padding-right: 10px;position:absolute;right:0px;">
-                  <el-button type="primary" icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>
-                  <el-button type="danger" icon="el-icon-refresh" @click="handleAdvanceReset">{{$t('table.reset')}}</el-button>
-                </span>
-              </el-col>
-          </el-row>
-          <el-row :gutter="24">
-            <el-form label-position="left" label-width="70px">
-              <el-col :span="12"> 
-                <el-form-item :label="$t('table.exportFileName')" prop="packageWeight">
-                  <el-input style='width:340px;' :placeholder="$t('excel.placeholder')" prefix-icon="el-icon-document" v-model="filename"></el-input>
-                </el-form-item>
-              </el-col>
-            </el-form>
-            <el-col :span="6">
-                <span style="display: inline-block;padding-right: 10px;position:absolute;right:0px;">
-                  <input id="excel-upload-input" type="file" accept=".xlsx, .xls" class="c-hide" @change="handkeFileChange"> 
-                  <el-button class="filter-item" icon="el-icon-upload2" @click="handleUpload">导入</el-button>
-                  <el-button class="filter-item" icon="el-icon-download" @click="handleDownload" :loading="downloadLoading" v-waves >{{$t('table.export')}}</el-button>
-                </span>
-              </el-col>
-          </el-row>
+              </el-form>
+              <el-col :span="6">
+                  <span style="display: inline-block;padding-right: 10px;position:absolute;right:0px;">
+                    <input id="excel-upload-input" type="file" accept=".xlsx, .xls" class="c-hide" @change="handkeFileChange"> 
+                    <el-button class="filter-item" icon="el-icon-upload2" @click="handleUpload">导入</el-button>
+                    <el-button class="filter-item" icon="el-icon-download" @click="handleDownload" :loading="downloadLoading" v-waves >{{$t('table.export')}}</el-button>
+                  </span>
+                </el-col>
+            </el-row>
+        </div>
+      </div>
+    
+      <el-table :key='tableKey' :data="list" v-loading="listLoading" :element-loading-text="$t('table.loadingText')" border fit highlight-current-row
+      @selection-change="handleSelectionChange" style="width: 100%">
+        <el-table-column type="selection" align="center"></el-table-column>
+        <el-table-column width="200px" align="center" :label="$t('purchase.date')">
+          <template slot-scope="scope">
+            <span>{{scope.row.date | parseTime('{y}-{m}-{d}')}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column min-width="365px" align="center" :label="$t('purchase.purchasetransid')">
+          <template slot-scope="scope">
+            <span class="link-type" @click="handleUpdate(scope.row)">{{scope.row.purchasetransid}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column align="center" :label="$t('table.actions')" width="150" class-name="small-padding fixed-width">
+          <template slot-scope="scope">
+            <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('table.edit')}}</el-button>
+            <el-button size="mini" type="danger" @click="handleDelete(scope.row)">{{$t('table.delete')}}
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+
+      <div class="pagination-container">
+        <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="listQuery.page"
+          :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
+        </el-pagination>
       </div>
     </div>
-   
-    <el-table :key='tableKey' :data="list" v-loading="listLoading" :element-loading-text="$t('table.loadingText')" border fit highlight-current-row
-     @selection-change="handleSelectionChange" style="width: 100%">
-      <el-table-column type="selection" align="center"></el-table-column>
-      <el-table-column width="200px" align="center" :label="$t('purchase.date')">
-        <template slot-scope="scope">
-          <span>{{scope.row.date | parseTime('{y}-{m}-{d}')}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column min-width="365px" align="center" :label="$t('purchase.purchasetransid')">
-        <template slot-scope="scope">
-          <span class="link-type" @click="handleUpdate(scope.row)">{{scope.row.purchasetransid}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" :label="$t('table.actions')" width="150" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('table.edit')}}</el-button>
-          <el-button size="mini" type="danger" @click="handleDelete(scope.row)">{{$t('table.delete')}}
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
 
-    <div class="pagination-container">
-      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="listQuery.page"
-        :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
-      </el-pagination>
+    <div class="productTable" v-if="!this.baseVisible">
+      <div class="filter-container">
+        <span class="right">
+            <el-button class="filter-item" icon="el-icon-search" @click="handleReturnTable">{{$t('table.return')}}</el-button>
+          </span>
+      </div>
+        <el-form  :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="80px" style='width: 400px; margin-left:50px;'>
+          <el-form-item :label="$t('purchase.date')" prop="date">
+                <el-date-picker v-model="temp.date" type="datetime" prefix-icon="el-icon-edit"></el-date-picker>
+              </el-form-item>
+              <el-form-item :label="$t('purchase.purchasetransid')" prop="purchasetransid">
+                <el-input v-model="temp.purchasetransid" prefix-icon="el-icon-tickets"></el-input>
+          </el-form-item>
+        </el-form>
     </div>
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" :before-close="cancelData">
@@ -161,6 +179,7 @@ export default {
       activeName: 'first',
       dialogImageUrl: '',
       dialogVisible: false,
+      baseVisible: true,
       fileList: [],
       list: null,
       total: null,
@@ -255,15 +274,18 @@ export default {
       })
     },
     // 编辑
+    // handleUpdate(row) {
+    //   this.fileList = row.images
+    //   this.temp = Object.assign({}, row) // copy obj
+    //   this.temp.timestamp = new Date(this.temp.timestamp)
+    //   this.dialogStatus = 'update'
+    //   this.dialogFormVisible = true
+    //   this.$nextTick(() => {
+    //     this.$refs['dataForm'].clearValidate()
+    //   })
+    // },
     handleUpdate(row) {
-      this.fileList = row.images
-      this.temp = Object.assign({}, row) // copy obj
-      this.temp.timestamp = new Date(this.temp.timestamp)
-      this.dialogStatus = 'update'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
+      this.baseVisible = false
     },
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
@@ -315,6 +337,9 @@ export default {
       this.listQuery.range = 'asc'
       this.listQuery.sort = 'id'
       this.getList()
+    },
+    handleReturnTable() {
+      this.baseVisible = true
     },
     handleRemove(file, fileList) {
       console.log(file, fileList)

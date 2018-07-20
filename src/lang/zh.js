@@ -116,7 +116,8 @@ export default {
     loadingText: '给我一点时间',
     range: '排序',
     sortFiled: '排序域',
-    exportFileName: '文件名'
+    exportFileName: '文件名',
+    return: '返回'
   },
   errorLog: {
     tips: '请点击右上角bug小图标',
