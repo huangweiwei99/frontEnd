@@ -61,56 +61,56 @@ export const constantRouterMap = [
       {
         path: 'order',
         name: 'Order',
-        component: _import('tree/index'),
+        component: _import('wms/order/index'),
         meta: { title: 'order', icon: 'tree' }
       }
     ]
   },
-  {
-    path: '/example',
-    component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'example', icon: 'example' },
-    children: [
-      {
-        path: 'table',
-        name: 'Table',
-        component: _import('table/index'),
-        meta: { title: 'Table', icon: 'table' }
-      },
-      {
-        path: 'tree',
-        name: 'Tree',
-        component: _import('tree/index'),
-        meta: { title: 'tree', icon: 'tree' }
-      }
-    ]
-  },
-  {
-    path: '/form',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: _import('form/index'),
-        meta: { title: 'form', icon: 'form' }
-      }
-    ]
-  },
-  {
-    path: '/complexTable',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'ComplexTable',
-        component: _import('table/complexTable'),
-        meta: { title: 'complexTable', icon: 'form' }
-      }
-    ]
-  },
+  // {
+  //   path: '/example',
+  //   component: Layout,
+  //   redirect: '/example/table',
+  //   name: 'Example',
+  //   meta: { title: 'example', icon: 'example' },
+  //   children: [
+  //     {
+  //       path: 'table',
+  //       name: 'Table',
+  //       component: _import('table/index'),
+  //       meta: { title: 'Table', icon: 'table' }
+  //     },
+  //     {
+  //       path: 'tree',
+  //       name: 'Tree',
+  //       component: _import('tree/index'),
+  //       meta: { title: 'tree', icon: 'tree' }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/form',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: 'Form',
+  //       component: _import('form/index'),
+  //       meta: { title: 'form', icon: 'form' }
+  //     }
+  //   ]
+  // },
+  // {
+  //   path: '/complexTable',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: 'index',
+  //       name: 'ComplexTable',
+  //       component: _import('table/complexTable'),
+  //       meta: { title: 'complexTable', icon: 'form' }
+  //     }
+  //   ]
+  // },
 
   { path: '*', redirect: '/404', hidden: true }
 ]

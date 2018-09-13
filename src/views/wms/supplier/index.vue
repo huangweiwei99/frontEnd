@@ -1,80 +1,81 @@
 <template>
   <div class="app-container calendar-list-container">
-      <div class="filter-container">
-        <el-button class="filter-item" icon="el-icon-edit" @click="handleCreate">{{$t('table.add')}}</el-button>
-        <span class="right">
-          <el-button class="filter-item" icon="el-icon-search" @click="handleAdanceToggle">{{$t('table.advance')}}</el-button>
-        </span>
-        <div class="form-container" v-if="advanceVisable">
-            <el-row :gutter="24">
-              <el-form label-position="left" label-width="70px">
-              <el-col :span="6"> 
-                  <el-form-item :label="$t('supplier.name')" prop="name">
-                      <el-input v-model="listQuery.name" prefix-icon="el-icon-edit"></el-input>
-                   </el-form-item>
-              </el-col>
-              <el-col :span="6"> 
-                  <el-form-item :label="$t('supplier.platform')" prop="name">
-                      <el-input v-model="listQuery.platform" prefix-icon="el-icon-edit"></el-input>
-                   </el-form-item>
-              </el-col>
-              <el-col :span="6"> 
-                <el-form-item :label="$t('supplier.address')" prop="name">
-                      <el-input v-model="listQuery.address" prefix-icon="el-icon-edit"></el-input>
-                   </el-form-item>
-              </el-col>
-              <el-col :span="6"> 
-                      <el-form-item>
-                        <el-radio-group v-model="listQuery.range">
-                          <el-radio label="desc">倒序</el-radio>
-                          <el-radio label="asc">顺序</el-radio>
-                        </el-radio-group>
-                      </el-form-item>
-              </el-col>
-              </el-form>
-            </el-row>
-            <el-row :gutter="24">
-               <el-col :span="12"> 
-                  <el-form label-position="left" label-width="70px">
-                    <el-form-item :label="$t('table.sortFiled')" prop="sortFiled">
-                        <el-select style="width: 140px" class="filter-item" v-model="listQuery.sort">          
-                            <el-option key="name" :label="$t('supplier.name')" value="name"></el-option>
-                            <el-option key="platform" :label="$t('supplier.platform')" value="platform"></el-option>
-                            <el-option key="address" :label="$t('supplier.address')" value="address"></el-option>
-                        </el-select>
-                      </el-form-item>
-                  </el-form>
-                </el-col>
+    <!-- 搜索容器 -->
+    <div class="filter-container">
+      <el-button class="filter-item" icon="el-icon-edit" @click="handleCreate">{{$t('table.add')}}</el-button>
+      <span class="right">
+        <el-button class="filter-item" icon="el-icon-search" @click="handleAdanceToggle">{{$t('table.advance')}}</el-button>
+      </span>
+      <div class="form-container" v-if="advanceVisable">
+        <el-row :gutter="24">
+          <el-form label-position="left" label-width="70px">
             <el-col :span="6">
-                <span style="display: inline-block;padding-right: 10px;position:absolute;right:0px;">
-                  <el-button type="primary" icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>
-                  <el-button type="danger" icon="el-icon-refresh" @click="handleAdvanceReset">{{$t('table.reset')}}</el-button>
-                </span>
+              <el-form-item :label="$t('supplier.name')" prop="name">
+                <el-input v-model="listQuery.name" prefix-icon="el-icon-edit"></el-input>
+              </el-form-item>
             </el-col>
-          </el-row>
-            <el-row :gutter="24">
-            <el-form label-position="left" label-width="70px">
-                    <el-col :span="12"> 
-                      <el-form-item :label="$t('table.exportFileName')" prop="packageWeight">
-                         <el-input style='width:340px;' :placeholder="$t('excel.placeholder')" prefix-icon="el-icon-document" v-model="filename"></el-input>
-                      </el-form-item>
-                    </el-col>
-                    <el-col :span="6"> 
-                      
-                    </el-col>
-            </el-form>
             <el-col :span="6">
-                <span style="display: inline-block;padding-right: 10px;position:absolute;right:0px;">
-                  <input id="excel-upload-input" type="file" accept=".xlsx, .xls" class="c-hide" @change="handkeFileChange"> 
-                  <el-button class="filter-item" icon="el-icon-upload2" @click="handleUpload">导入</el-button>
-                  <el-button class="filter-item" icon="el-icon-download" @click="handleDownload" :loading="downloadLoading" v-waves >{{$t('table.export')}}</el-button>
-                </span>
-              </el-col>
-          </el-row>
-        </div>
+              <el-form-item :label="$t('supplier.platform')" prop="name">
+                <el-input v-model="listQuery.platform" prefix-icon="el-icon-edit"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item :label="$t('supplier.address')" prop="name">
+                <el-input v-model="listQuery.address" prefix-icon="el-icon-edit"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item>
+                <el-radio-group v-model="listQuery.range">
+                  <el-radio label="desc">倒序</el-radio>
+                  <el-radio label="asc">顺序</el-radio>
+                </el-radio-group>
+              </el-form-item>
+            </el-col>
+          </el-form>
+        </el-row>
+        <el-row :gutter="24">
+          <el-col :span="12">
+            <el-form label-position="left" label-width="70px">
+              <el-form-item :label="$t('table.sortFiled')" prop="sortFiled">
+                <el-select style="width: 140px" class="filter-item" v-model="listQuery.sort">
+                  <el-option key="name" :label="$t('supplier.name')" value="name"></el-option>
+                  <el-option key="platform" :label="$t('supplier.platform')" value="platform"></el-option>
+                  <el-option key="address" :label="$t('supplier.address')" value="address"></el-option>
+                </el-select>
+              </el-form-item>
+            </el-form>
+          </el-col>
+          <el-col :span="6">
+            <span style="display: inline-block;padding-right: 10px;position:absolute;right:0px;">
+              <el-button type="primary" icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>
+              <el-button type="danger" icon="el-icon-refresh" @click="handleAdvanceReset">{{$t('table.reset')}}</el-button>
+            </span>
+          </el-col>
+        </el-row>
+        <el-row :gutter="24">
+          <el-form label-position="left" label-width="70px">
+            <el-col :span="12">
+              <el-form-item :label="$t('table.exportFileName')" prop="packageWeight">
+                <el-input style='width:340px;' :placeholder="$t('excel.placeholder')" prefix-icon="el-icon-document" v-model="filename"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+
+            </el-col>
+          </el-form>
+          <el-col :span="6">
+            <span style="display: inline-block;padding-right: 10px;position:absolute;right:0px;">
+              <input id="excel-upload-input" type="file" accept=".xlsx, .xls" class="c-hide" @change="handkeFileChange">
+              <el-button class="filter-item" icon="el-icon-upload2" @click="handleUpload">导入</el-button>
+              <el-button class="filter-item" icon="el-icon-download" @click="handleDownload" :loading="downloadLoading" v-waves>{{$t('table.export')}}</el-button>
+            </span>
+          </el-col>
+        </el-row>
       </div>
-      <el-table :key='tableKey' :data="list" v-loading="listLoading" :element-loading-text="$t('table.loadingText')" border fit highlight-current-row
-     @selection-change="handleSelectionChange" style="width: 100%">
+    </div>
+    <!-- 数据表格 -->
+    <el-table :key='tableKey' :data="list" v-loading="listLoading" :element-loading-text="$t('table.loadingText')" border fit highlight-current-row @selection-change="handleSelectionChange" style="width: 100%">
       <el-table-column type="selection" align="center"></el-table-column>
       <el-table-column min-width="200" align="center" :label="$t('supplier.name')">
         <template slot-scope="scope">
@@ -87,7 +88,7 @@
         </template>
       </el-table-column>
       <el-table-column align="center" :label="$t('supplier.address')" min-width="365px">
-         <template slot-scope="scope">
+        <template slot-scope="scope">
           <span>{{scope.row.address}}</span>
         </template>
       </el-table-column>
@@ -98,27 +99,27 @@
           </el-button>
         </template>
       </el-table-column>
-      </el-table>
-      <div class="pagination-container">
-        <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="listQuery.page"
-        :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
+    </el-table>
+    <!-- 分页导航 -->
+    <div class="pagination-container">
+      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
-      </div>
-
-      <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" :before-close="cancelData">
+    </div>
+    <!-- 采购表单 -->
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" :before-close="cancelData">
       <template>
-         <el-form  :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="80px" style='width: 400px; margin-left:50px;'>
-              <el-form-item :label="$t('supplier.name')" prop="name">
-                <el-input v-model="temp.name" prefix-icon="el-icon-edit"></el-input>
-              </el-form-item>
-              <el-form-item :label="$t('supplier.platform')" prop="platform">
-                <el-input v-model="temp.platform" prefix-icon="el-icon-tickets"></el-input>
-              </el-form-item>
-              <el-form-item :label="$t('supplier.address')" prop="address">
-                <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="temp.address">
-                </el-input>
-              </el-form-item>
-            </el-form>        
+        <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="80px" style='width: 400px; margin-left:50px;'>
+          <el-form-item :label="$t('supplier.name')" prop="name">
+            <el-input v-model="temp.name" prefix-icon="el-icon-edit"></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('supplier.platform')" prop="platform">
+            <el-input v-model="temp.platform" prefix-icon="el-icon-tickets"></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('supplier.address')" prop="address">
+            <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="temp.address">
+            </el-input>
+          </el-form-item>
+        </el-form>
       </template>
       <div slot="footer" class="dialog-footer">
         <el-button @click="cancelData" icon="el-icon-close">{{$t('table.cancel')}}</el-button>
@@ -126,8 +127,7 @@
         <el-button v-else type="primary" @click="updateData" icon="el-icon-check">{{$t('table.confirm')}}</el-button>
       </div>
     </el-dialog>
-
-</div>
+  </div>
 </template>
 <<script>
 import { fetchList, createSupplier, updateSupplier } from '@/api/supplier'
@@ -403,15 +403,14 @@ export default {
 }
 </script>
 <style lang="scss">
-.right
-{
-display: inline-block;
-padding-right: 20px;
-position:absolute;
-right:0px;
+.right {
+  display: inline-block;
+  padding-right: 20px;
+  position: absolute;
+  right: 0px;
 }
 
-#excel-upload-input{
+#excel-upload-input {
   display: none;
   z-index: -9999;
 }

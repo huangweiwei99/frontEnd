@@ -1,73 +1,74 @@
 <template>
   <div class="app-container calendar-list-container">
     <div class="base" v-if="baseVisible">
+      <!-- 搜索容器 -->
       <div class="filter-container">
+
         <el-button class="filter-item" icon="el-icon-edit" @click="handleCreate">{{$t('table.add')}}</el-button>
-          <span class="right">
-            <el-button class="filter-item" icon="el-icon-search" @click="handleAdanceToggle">{{$t('table.advance')}}</el-button>
-          </span>
+        <span class="right">
+          <el-button class="filter-item" icon="el-icon-search" @click="handleAdanceToggle">{{$t('table.advance')}}</el-button>
+        </span>
         <div class="form-container" v-if="advanceVisable">
-            <el-row :gutter="24">
-                <el-form label-position="left" label-width="70px">
-                      <el-col :span="9"> 
-                        <el-form-item :label="$t('purchase.date')" prop="name">
-                          <el-input v-model="listQuery.date" prefix-icon="el-icon-edit"></el-input>
-                        </el-form-item>
-                      </el-col>
-                      <el-col :span="9"> 
-                        <el-form-item :label="$t('purchase.purchasetransid')" prop="packageWeight">
-                          <el-input v-model="listQuery.purchasetransid" prefix-icon="el-icon-remove-outline"></el-input>
-                        </el-form-item>
-                      </el-col>
-                      <el-col :span="6"> 
-                        <el-form-item>
-                          <el-radio-group v-model="listQuery.range">
-                            <el-radio label="desc">倒序</el-radio>
-                            <el-radio label="asc">顺序</el-radio>
-                          </el-radio-group>
-                        </el-form-item>
-                      </el-col>
-                </el-form>
-            </el-row>
-            <el-row :gutter="24">
-              <el-form label-position="left" label-width="70px">
-                <el-col :span="12">
-                    <el-form-item :label="$t('table.sortFiled')" prop="packageWeight">
-                        <el-select style="width: 140px" class="filter-item" v-model="listQuery.sort">          
-                          <el-option key="date" :label="$t('purchase.date')" value="date"></el-option>
-                          <el-option key="purchasetransid" :label="$t('purchase.purchasetransid')" value="purchasetransid"></el-option>
-                        </el-select>
-                    </el-form-item>
-                  </el-col>
-              </el-form>
+          <el-row :gutter="24">
+            <el-form label-position="left" label-width="70px">
+              <el-col :span="9">
+                <el-form-item :label="$t('purchase.date')" prop="name">
+                  <el-input v-model="listQuery.date" prefix-icon="el-icon-edit"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="9">
+                <el-form-item :label="$t('purchase.purchasetransid')" prop="packageWeight">
+                  <el-input v-model="listQuery.purchasetransid" prefix-icon="el-icon-remove-outline"></el-input>
+                </el-form-item>
+              </el-col>
               <el-col :span="6">
-                  <span style="display: inline-block;padding-right: 10px;position:absolute;right:0px;">
-                    <el-button type="primary" icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>
-                    <el-button type="danger" icon="el-icon-refresh" @click="handleAdvanceReset">{{$t('table.reset')}}</el-button>
-                  </span>
-                </el-col>
-            </el-row>
-            <el-row :gutter="24">
-              <el-form label-position="left" label-width="70px">
-                <el-col :span="12"> 
-                  <el-form-item :label="$t('table.exportFileName')" prop="packageWeight">
-                    <el-input style='width:340px;' :placeholder="$t('excel.placeholder')" prefix-icon="el-icon-document" v-model="filename"></el-input>
-                  </el-form-item>
-                </el-col>
-              </el-form>
-              <el-col :span="6">
-                  <span style="display: inline-block;padding-right: 10px;position:absolute;right:0px;">
-                    <input id="excel-upload-input" type="file" accept=".xlsx, .xls" class="c-hide" @change="handkeFileChange"> 
-                    <el-button class="filter-item" icon="el-icon-upload2" @click="handleUpload">导入</el-button>
-                    <el-button class="filter-item" icon="el-icon-download" @click="handleDownload" :loading="downloadLoading" v-waves >{{$t('table.export')}}</el-button>
-                  </span>
-                </el-col>
-            </el-row>
+                <el-form-item>
+                  <el-radio-group v-model="listQuery.range">
+                    <el-radio label="desc">倒序</el-radio>
+                    <el-radio label="asc">顺序</el-radio>
+                  </el-radio-group>
+                </el-form-item>
+              </el-col>
+            </el-form>
+          </el-row>
+          <el-row :gutter="24">
+            <el-form label-position="left" label-width="70px">
+              <el-col :span="12">
+                <el-form-item :label="$t('table.sortFiled')" prop="packageWeight">
+                  <el-select style="width: 140px" class="filter-item" v-model="listQuery.sort">
+                    <el-option key="date" :label="$t('purchase.date')" value="date"></el-option>
+                    <el-option key="purchasetransid" :label="$t('purchase.purchasetransid')" value="purchasetransid"></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+            </el-form>
+            <el-col :span="6">
+              <span style="display: inline-block;padding-right: 10px;position:absolute;right:0px;">
+                <el-button type="primary" icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>
+                <el-button type="danger" icon="el-icon-refresh" @click="handleAdvanceReset">{{$t('table.reset')}}</el-button>
+              </span>
+            </el-col>
+          </el-row>
+          <el-row :gutter="24">
+            <el-form label-position="left" label-width="70px">
+              <el-col :span="12">
+                <el-form-item :label="$t('table.exportFileName')" prop="packageWeight">
+                  <el-input style='width:340px;' :placeholder="$t('excel.placeholder')" prefix-icon="el-icon-document" v-model="filename"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-form>
+            <el-col :span="6">
+              <span style="display: inline-block;padding-right: 10px;position:absolute;right:0px;">
+                <input id="excel-upload-input" type="file" accept=".xlsx, .xls" class="c-hide" @change="handkeFileChange">
+                <el-button class="filter-item" icon="el-icon-upload2" @click="handleUpload">导入</el-button>
+                <el-button class="filter-item" icon="el-icon-download" @click="handleDownload" :loading="downloadLoading" v-waves>{{$t('table.export')}}</el-button>
+              </span>
+            </el-col>
+          </el-row>
         </div>
       </div>
-    
-      <el-table :key='tableKey' :data="list" v-loading="listLoading" :element-loading-text="$t('table.loadingText')" border fit highlight-current-row
-      @selection-change="handleSelectionChange" style="width: 100%">
+      <!-- 数据表格 -->
+      <el-table :key='tableKey' :data="list" v-loading="listLoading" :element-loading-text="$t('table.loadingText')" border fit highlight-current-row @selection-change="handleSelectionChange" style="width: 100%">
         <el-table-column type="selection" align="center"></el-table-column>
         <el-table-column width="200px" align="center" :label="$t('purchase.date')">
           <template slot-scope="scope">
@@ -87,87 +88,110 @@
           </template>
         </el-table-column>
       </el-table>
-
+      <!-- 分页导航 -->
       <div class="pagination-container">
-        <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="listQuery.page"
-          :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
+        <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
         </el-pagination>
       </div>
     </div>
-
+    <!-- 产品表单 -->
     <div class="productTable" v-if="!this.baseVisible">
-      <div class="filter-container">
-        <span class="right">
-            <el-button class="filter-item" icon="el-icon-search" @click="handleReturnTable">{{$t('table.return')}}</el-button>
-          </span>
-      </div>
-        <el-form  :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="80px" style='width: 400px; margin-left:50px;'>
-          <el-form-item :label="$t('purchase.date')" prop="date">
-                <el-date-picker v-model="temp.date" type="datetime" prefix-icon="el-icon-edit"></el-date-picker>
-              </el-form-item>
-              <el-form-item :label="$t('purchase.purchasetransid')" prop="purchasetransid">
-                <el-input v-model="temp.purchasetransid" prefix-icon="el-icon-tickets"></el-input>
-          </el-form-item>
-        </el-form>
-    </div>
+      <el-row>
+        <el-card class="box-card">
+          <div slot="header" class="clearfix">
+            <span>{{textMap[formStatus]}}</span>
+          </div>
+          <div>
+            <el-form :rules="rules" ref="dataForm" :model="temp" label-position="right" label-width="80px">
+              <el-row :gutter="24">
+                <el-col :span="8">
+                  <el-form-item :label="$t('purchase.purchasetransid')" prop="purchasetransid">
+                    <el-input v-model="temp.purchasetransid" prefix-icon="el-icon-tickets"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item :label="$t('purchase.place')" prop="place">
+                    <el-input v-model="temp.place" prefix-icon="el-icon-tickets"></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                  <el-form-item :label="$t('purchase.date')" prop="date">
+                    <el-date-picker type="date" v-model="temp.date" placeholder="选择日期"></el-date-picker>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row :gutter="24">
+                <el-col :span="8">
+                  <el-form-item :label="$t('supplier.name')" prop="name">
+                    <el-select v-model="temp.supplier" :placeholder="$t('purchase.optsupplier')" remote @change="getProductsList()">
+                      <el-option v-for="item in suppliersopts" :key="item.id" :label="item.name" :value="item.id">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+            <el-form :rules="rules" ref="dataForm" :model="form" label-position="top" label-width="80px" style='margin-left:50px;'>
+              <el-row :gutter="20" style="margin-top:50px;">
+                <el-col :span="6" v-for="(item,index) in form.products" :key="index">
+                  <el-card class="box-card">
+                    <div slot="header" class="clearfix">
+                      <!--  -->
+                      <el-popover placement="top-start" width="160" trigger="hover">
+                        <div style="width:110">
+                          <img :src="item.cover" :alt="item.sku" width="100">
+                        </div>
+                        <span slot="reference">{{item.sku}}</span>
+                      </el-popover>
+                    </div>
+                    <div class="component-item">
+                      <el-form-item prop="quantity">
+                        <md-input icon="search" name="quantity" :placeholder="$t('purchase.quantity')" v-model="item.quantity">{{$t('purchase.quantity')}}</md-input>
+                      </el-form-item>
+                      <el-form-item prop="price">
+                        <md-input icon="tickets" name="price" :placeholder="$t('purchase.price')" v-model="item.price">{{$t('purchase.price')}}</md-input>
+                      </el-form-item>
+                    </div>
+                  </el-card>
+                </el-col>
+              </el-row>
+            </el-form>
+          </div>
+        </el-card>
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" :before-close="cancelData">
-      <template>
-        <el-tabs v-model="activeName">
-          <el-tab-pane label="采购信息" name="first">
-            <el-form  :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="80px" style='width: 400px; margin-left:50px;'>
-              <el-form-item :label="$t('purchase.date')" prop="date">
-                <el-date-picker v-model="temp.date" type="datetime" prefix-icon="el-icon-edit"></el-date-picker>
-              </el-form-item>
-              <el-form-item :label="$t('purchase.purchasetransid')" prop="purchasetransid">
-                <el-input v-model="temp.purchasetransid" prefix-icon="el-icon-tickets"></el-input>
-              </el-form-item>
-            </el-form>
-          </el-tab-pane>
-          <el-tab-pane label="采购信息" name="second">
-            <el-form label-position="left" label-width="70px">
-              <el-form-item :label="$t('table.sortFiled')" prop="packageWeight">
-                  <el-select style="width: 140px" class="filter-item" v-model="listQuery.sort">          
-                    <el-option key="date" :label="$t('purchase.date')" value="date"></el-option>
-                    <el-option key="purchasetransid" :label="$t('purchase.purchasetransid')" value="purchasetransid"></el-option>
-                  </el-select>
-              </el-form-item>
-              <el-form-item :label="$t('table.sortFiled')" prop="packageWeight">
-                  <el-select style="width: 140px" class="filter-item" v-model="listQuery.sort">          
-                    <el-option key="date" :label="$t('purchase.date')" value="date"></el-option>
-                    <el-option key="purchasetransid" :label="$t('purchase.purchasetransid')" value="purchasetransid"></el-option>
-                  </el-select>
-              </el-form-item>
-            </el-form>
-          </el-tab-pane>
-        </el-tabs>
-      </template>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="cancelData" icon="el-icon-close">{{$t('table.cancel')}}</el-button>
-        <el-button v-if="dialogStatus=='create'" type="primary" @click="createData" icon="el-icon-check">{{$t('table.confirm')}}</el-button>
-        <el-button v-else type="primary" @click="updateData" icon="el-icon-check">{{$t('table.confirm')}}</el-button>
-      </div>
-    </el-dialog>
+      </el-row>
+      <span class="right" style="margin-top:10px;">
+        <div slot="footer" class="dialog-footer">
+          <el-button icon="el-icon-close" @click="handleReturnTable">{{$t('table.cancel')}}</el-button>
+          <el-button v-if="formStatus=='create'" type="primary" @click="createData" icon="el-icon-check">{{$t('table.confirm')}}</el-button>
+          <el-button v-else type="primary" @click="updateData" icon="el-icon-check">{{$t('table.confirm')}}</el-button>
+        </div>
+      </span>
+    </div>
   </div>
 </template>
 
 <script>
-import { fetchList, createPurchase, updatePurchase } from '@/api/purchase'
+import { fetchList, createPurchase, updatePurchase, fetchSupplierList, fetchProductList, fetchPurchase } from '@/api/purchase'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 import XLSX from 'xlsx'
+import MdInput from '@/components/MDinput'
 
 export default {
   name: 'purchaseTable',
   directives: {
     waves
   },
+  components: {
+    MdInput
+  },
   data() {
     var checkPurchaseTransId = (rule, value, callback) => {
       if (!value) {
         return callback(new Error('交易号不能为空'))
-      } else if (value.length !== 10) {
-        return callback(new Error('交易号长度为6位'))
+      } else if (value.length !== 4) {
+        return callback(new Error('交易号长度为4位'))
       } else if (!/^\d+$/.test(value)) {
         return callback(new Error('只能输入数字'))
       } else {
@@ -191,13 +215,18 @@ export default {
         sort: 'purchasetransid',
         range: 'asc'
       },
+      supplierQuery: {
+        id: ''
+      },
       temp: {
         id: undefined,
         date: new Date(),
-        purchasetransid: ''
+        purchasetransid: '',
+        supplier: '',
+        place: '',
+        products: []
       },
-      dialogFormVisible: false,
-      dialogStatus: '',
+      formStatus: '',
       textMap: {
         update: 'Edit',
         create: 'Create'
@@ -208,11 +237,19 @@ export default {
       },
       downloadLoading: false,
       multipleSelection: [],
-      filename: ''
+      filename: '',
+      suppliersopts: [],
+      form: {
+        products: [{
+          quantity: null,
+          price: null
+        }]
+      }
     }
   },
   created() {
     this.getList()
+    this.getSupplierList()
   },
   methods: {
     // 数据列表
@@ -221,6 +258,22 @@ export default {
       fetchList(this.listQuery).then(response => {
         this.list = response.data.items
         this.total = response.data.total
+        this.listLoading = false
+      })
+    },
+    getSupplierList() {
+      this.listLoading = true
+      fetchSupplierList().then(response => {
+        this.suppliersopts = response.data.items
+        this.listLoading = false
+      })
+      this.form.products = []
+    },
+    getProductsList() {
+      console.log(this.temp.supplier)
+      this.supplierQuery.id = this.temp.supplier
+      fetchProductList(this.temp.supplier).then(response => {
+        this.form.products = response.data.items
         this.listLoading = false
       })
     },
@@ -244,25 +297,29 @@ export default {
         timestamp: new Date(),
         name: '',
         sku: '',
-        packageWeight: '',
-        packageSize: ''
+        supplier: ''
       }
     },
     handleCreate() {
+      this.baseVisible = false
+      this.formStatus = 'create'
       this.resetTemp()
-      this.dialogStatus = 'create'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
+      this.form.products = null
+      // this.formStatus = 'create'
+      // this.dialogFormVisible = true
+      // this.$nextTick(() => {
+      //   this.$refs['dataForm'].clearValidate()
+      // })
     },
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
+          console.log(this.temp)
+          this.temp.products = this.form.products
           createPurchase(this.temp).then(() => {
             this.list.unshift(this.temp)
-            this.dialogFormVisible = false
+            this.baseVisible = true
             this.$notify({
               title: '成功',
               message: '创建成功',
@@ -278,7 +335,7 @@ export default {
     //   this.fileList = row.images
     //   this.temp = Object.assign({}, row) // copy obj
     //   this.temp.timestamp = new Date(this.temp.timestamp)
-    //   this.dialogStatus = 'update'
+    //   this.formStatus = 'update'
     //   this.dialogFormVisible = true
     //   this.$nextTick(() => {
     //     this.$refs['dataForm'].clearValidate()
@@ -286,6 +343,22 @@ export default {
     // },
     handleUpdate(row) {
       this.baseVisible = false
+      this.formStatus = 'update'
+      fetchPurchase(row.purchasetransid).then(response => {
+        this.temp.id = response.data.item.id
+        this.temp.date = response.data.item.date
+        this.temp.purchasetransid = response.data.item.purchasetransid
+        this.temp.place = response.data.item.place
+        this.temp.supplier = response.data.item.supplier
+        this.form.products = response.data.item.products
+      })
+      //   temp: {
+      //   id: undefined,
+      //   date: new Date(),
+      //   purchasetransid: '',
+      //   supplier: '',
+      //   place: ''
+      // },
     },
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
@@ -300,7 +373,7 @@ export default {
                 break
               }
             }
-            this.dialogFormVisible = false
+            this.baseVisible = true
             this.$notify({
               title: '成功',
               message: '更新成功',
@@ -434,24 +507,26 @@ export default {
 }
 </script>
 <style lang="scss">
-.right
-{
-display: inline-block;
-padding-right: 20px;
-position:absolute;
-right:0px;
+.right {
+  display: inline-block;
+  padding-right: 20px;
+  position: absolute;
+  right: 0px;
 }
 
-#excel-upload-input{
+#excel-upload-input {
   display: none;
   z-index: -9999;
 }
 
 .el-dialog__body {
-    padding: 0px 20px;
+  padding: 0px 20px;
 }
 // .form-container {
 //   padding-top: 5px;
 //   border: 1px solid gray
 // }
+.box-card {
+  margin: 5px 0px;
+}
 </style>

@@ -2,28 +2,25 @@
   <div class="app-container calendar-list-container">
     <!-- 过滤器 -->
     <div class="filter-container">
-      <el-button class="filter-item" icon="el-icon-edit" @click="handleCreate">{{$t('table.add')}}</el-button>
+      <el-button class="filter-item" icon="el-icon-edit" @click="handleSync">{{$t('table.add')}}</el-button>
       <span class="right">
         <el-button class="filter-item" icon="el-icon-search" @click="handleAdanceToggle">{{$t('table.advance')}}</el-button>
       </span>
       <div class="form-container" v-if="advanceVisable">
         <el-row :gutter="24">
           <el-form label-position="left" label-width="70px">
-            <el-col :span="6">
-              <el-form-item :label="$t('product.name')" prop="name">
-                <el-input v-model="listQuery.name" prefix-icon="el-icon-edit"></el-input>
+            <el-col :span="12">
+              <el-form-item :label="$t('order.date')" prop="date">
+                <!-- <el-input v-model="listQuery.date" prefix-icon="el-icon-edit"></el-input> -->
+                <el-date-picker v-model="listQuery.date" type="daterange" format="yyyy 年 MM 月 dd 日" align="right" unlink-panels range-separator="至 " start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions2"></el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :span="6">
-              <el-form-item :label="$t('product.sku')" prop="sku">
-                <el-input v-model="listQuery.sku" prefix-icon="el-icon-tickets"></el-input>
+              <el-form-item :label="$t('order.orderId')" prop="orderId">
+                <el-input v-model="listQuery.orderId" prefix-icon="el-icon-tickets"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :span="6">
-              <el-form-item :label="$t('product.packageWeight')" prop="packageWeight">
-                <el-input v-model="listQuery.packageWeight" prefix-icon="el-icon-remove-outline"></el-input>
-              </el-form-item>
-            </el-col>
+
             <el-col :span="6">
               <el-form-item>
                 <el-radio-group v-model="listQuery.range">
@@ -36,15 +33,28 @@
         </el-row>
         <el-row :gutter="24">
           <el-form label-position="left" label-width="70px">
-            <el-col :span="12">
-              <el-form-item :label="$t('table.sortFiled')" prop="packageWeight">
-                <el-select style="width: 140px" class="filter-item" v-model="listQuery.sort">
-                  <el-option key="name" :label="$t('product.name')" value="name"></el-option>
-                  <el-option key="sku" :label="$t('product.sku')" value="sku"></el-option>
-                  <el-option key="packageWeight" :label="$t('product.packageWeight')" value="packageWeight"></el-option>
+            <el-col :span="6">
+              <el-form-item :label="$t('order.transId')" prop="transId">
+                <el-input v-model="listQuery.transId" prefix-icon="el-icon-remove-outline"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item :label="$t('order.express')" prop="express">
+                <el-select v-model="listQuery.express" placeholder="请选择">
+                  <el-option v-for="item in expressOptions" :key="item.value" :label="item.label" :value="item.value">
+                  </el-option>
                 </el-select>
               </el-form-item>
             </el-col>
+            <el-col :span="6">
+              <el-form-item :label="$t('order.status')" prop="status">
+                <el-select v-model="listQuery.status" placeholder="请选择">
+                  <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+
             <el-col :span="6">
 
             </el-col>
@@ -64,7 +74,15 @@
               </el-form-item>
             </el-col>
             <el-col :span="6">
-
+              <el-form-item :label="$t('table.sortFiled')" prop="packageWeight">
+                <el-select style="width: 140px" class="filter-item" v-model="listQuery.sort">
+                  <el-option key="date" :label="$t('order.date')" value="date"></el-option>
+                  <el-option key="orderId" :label="$t('order.orderId')" value="orderId"></el-option>
+                  <el-option key="transId" :label="$t('order.transId')" value="transId"></el-option>
+                  <el-option key="express" :label="$t('order.express')" value="express"></el-option>
+                  <el-option key="status" :label="$t('order.status')" value="status"></el-option>
+                </el-select>
+              </el-form-item>
             </el-col>
           </el-form>
           <el-col :span="6">
@@ -80,24 +98,30 @@
     <!-- 表格 -->
     <el-table :key='tableKey' :data="list" v-loading="listLoading" :element-loading-text="$t('table.loadingText')" border fit highlight-current-row @selection-change="handleSelectionChange" style="width: 100%">
       <el-table-column type="selection" align="center"></el-table-column>
-      <el-table-column width="110px" align="center" :label="$t('product.sku')">
+      <el-table-column width="160px" align="center" :label="$t('order.date')">
         <template slot-scope="scope">
-          <span>{{scope.row.sku}}</span>
+          <span>{{scope.row.date | parseTime('{y}-{m}-{d}')}}</span>
         </template>
       </el-table-column>
-      <el-table-column min-width="365px" align="center" :label="$t('product.name')">
+      <el-table-column min-width="265px" align="center" :label="$t('order.orderId')">
         <template slot-scope="scope">
-          <span class="link-type" @click="handleUpdate(scope.row)">{{scope.row.name}}</span>
+          <span class="link-type" @click="handleUpdate(scope.row)">{{scope.row.orderId}}</span>
         </template>
       </el-table-column>
-      <el-table-column width="80px" align="center" :label="$t('product.packageWeight')">
+      <el-table-column min-width="265px" align="center" :label="$t('order.transId')">
         <template slot-scope="scope">
-          <span>{{scope.row.packageWeight}}</span>
+          <span class="link-type" @click="handleUpdate(scope.row)">{{scope.row.transId}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="$t('product.packageSize')" width="95">
+
+      <el-table-column width="130px" align="center" :label="$t('order.express')">
         <template slot-scope="scope">
-          <span>{{scope.row.packageSize}}</span>
+          <span>{{scope.row.express}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" :label="$t('order.status')" width="95">
+        <template slot-scope="scope">
+          <span>{{scope.row.status}}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" :label="$t('table.actions')" width="150" class-name="small-padding fixed-width">
@@ -113,51 +137,72 @@
       <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
       </el-pagination>
     </div>
-    <!-- 编辑对话框 -->
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" :before-close="cancelData">
+    <!-- 同步订单对话框 -->
+    <el-dialog :title="$t('order.sync')" :visible.sync="syncFormVisible" :before-close="cancelSyncData">
       <template>
-        <el-tabs v-model="activeName">
-          <el-tab-pane label="产品信息" name="first">
-            <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="80px" style='width: 400px; margin-left:50px;'>
-              <el-form-item :label="$t('table.title')" prop="name">
-                <el-input v-model="temp.name" prefix-icon="el-icon-edit"></el-input>
-              </el-form-item>
-              <el-form-item :label="$t('product.sku')" prop="sku">
-                <el-input v-model="temp.sku" prefix-icon="el-icon-tickets"></el-input>
-              </el-form-item>
-              <el-form-item :label="$t('product.packageWeight')" prop="packageWeight">
-                <el-input v-model="temp.packageWeight" prefix-icon="el-icon-remove-outline"></el-input>
-              </el-form-item>
-              <el-form-item :label="$t('product.packageSize')" prop="packageSize">
-                <el-input v-model="temp.packageSize" prefix-icon="el-icon-message"></el-input>
-              </el-form-item>
-              <el-form-item :label="$t('product.remark')">
-                <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="temp.remark">
-                </el-input>
-              </el-form-item>
-            </el-form>
-          </el-tab-pane>
-          <el-tab-pane label="产品图片" name="second">
-            <el-upload ref="upload" action="https://jsonplaceholder.typicode.com/posts/" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :file-list="fileList">
-              <i class="el-icon-plus"></i>
-            </el-upload>
-            <el-dialog :visible.sync="dialogVisible" append-to-body>
-              <img width="100%" :src="dialogImageUrl" alt="">
-            </el-dialog>
-          </el-tab-pane>
-        </el-tabs>
+        <div v-show="syncProcessVisable">
+          <el-progress :percentage="70"></el-progress>
+        </div>
+        <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="80px" style='width: 400px; margin-left:50px;'>
+          <el-form-item :label="$t('order.dateRange')" prop="dateRange">
+            <el-date-picker v-model="temp.dateRange" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions2">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item :label="$t('order.platform')" prop="platfrom">
+            <el-select v-model="temp.platfrom" placeholder="请选择">
+              <el-option v-for="item in platfromOptions" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item :label="$t('order.account')" prop="account">
+            <el-select v-model="temp.account" placeholder="请选择">
+              <el-option v-for="item in accountOptions" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
       </template>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="cancelData" icon="el-icon-close">{{$t('table.cancel')}}</el-button>
-        <el-button v-if="dialogStatus=='create'" type="primary" @click="createData" icon="el-icon-check">{{$t('table.confirm')}}</el-button>
-        <el-button v-else type="primary" @click="updateData" icon="el-icon-check">{{$t('table.confirm')}}</el-button>
+        <el-button @click="cancelSyncData" icon="el-icon-close">{{$t('table.cancel')}}</el-button>
+        <el-button type="primary" @click="syncData" icon="el-icon-check">{{$t('order.sync')}}</el-button>
       </div>
+    </el-dialog>
+
+    <!-- 编辑菜单对话框 -->
+    <el-dialog title="编辑菜单" :visible.sync="editFormVisible">
+      <template>
+        <el-form label-position="left" label-width="80px" :model="order" style='width: 400px; margin-left:50px;'>
+          <el-form-item :label="$t('order.date')" prop="dateRange">
+            <el-date-picker v-model="order.date" type="date" placeholder="选择日期">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item :label="$t('order.orderId')" prop="orderId">
+            <el-input v-model="order.orderId"></el-input>
+          </el-form-item>
+          <el-form-item :label="$t('order.express')" prop="express">
+            <el-select v-model="order.express" placeholder="请选择">
+              <el-option v-for="item in expressOptions" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item :label="$t('order.status')" prop="status">
+            <el-select v-model="order.status" placeholder="请选择">
+              <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="cancelEditData" icon="el-icon-close">{{$t('table.cancel')}}</el-button>
+          <el-button type="primary" @click="syncData" icon="el-icon-check">{{$t('order.sync')}}</el-button>
+        </div>
+      </template>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { fetchList, createProduct, updateProduct } from '@/api/product'
+import { fetchList } from '@/api/order'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 import XLSX from 'xlsx'
@@ -220,20 +265,29 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        name: undefined,
-        sort: 'sku',
+        sort: '',
+        date: '',
+        transId: '',
+        orderId: '',
+        status: '',
+        express: '',
         range: 'asc'
       },
       temp: {
         id: undefined,
-        remark: '',
-        timestamp: new Date(),
-        name: '',
-        sku: '',
-        packageWeight: '',
-        packgeSize: ''
+        dateRange: '',
+        account: '',
+        platfrom: ''
       },
-      dialogFormVisible: false,
+      order: {
+        date: '',
+        transId: '',
+        express: '',
+        status: ''
+      },
+      syncFormVisible: false,
+      syncProcessVisable: false,
+      editFormVisible: false,
       dialogStatus: '',
       textMap: {
         update: 'Edit',
@@ -246,6 +300,72 @@ export default {
         packageWeight: [{ required: true, validator: checkPackageWeight, trigger: 'blur' }],
         packageSize: [{ required: true, validator: checkPackageSize, trigger: 'blur' }]
       },
+      pickerOptions2: {
+        shortcuts: [{
+          text: '最近一周',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', [start, end])
+          }
+        }, {
+          text: '最近一个月',
+          onClick(picker) {
+            // const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+          }
+        }, {
+          text: '最近三个月',
+          onClick(picker) {
+            const end = new Date()
+            const start = new Date()
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+            picker.$emit('pick', [start, end])
+          }
+        }]
+      },
+      platfromOptions: [{
+        value: '1',
+        label: 'ebay'
+      }, {
+        value: '2',
+        label: 'aliexpress'
+      }, {
+        value: '3',
+        label: '其他'
+      }],
+      accountOptions: [{
+        value: '1',
+        label: 'vson.mail@gmail.com'
+      }, {
+        value: '2',
+        label: 'happymama888@gmail.com'
+      }, {
+        value: '3',
+        label: '其他'
+      }],
+      expressOptions: [{
+        value: '出口易',
+        label: '出口易'
+      }, {
+        value: '三态速递',
+        label: '三态速递'
+      }, {
+        value: '递四方',
+        label: '递四方'
+      }],
+      statusOptions: [{
+        value: '已发货',
+        label: '已发货'
+      }, {
+        value: '未处理',
+        label: '未处理'
+      }, {
+        value: '发货中',
+        label: '发货中'
+      }],
       downloadLoading: false,
       multipleSelection: [],
       filename: ''
@@ -264,22 +384,19 @@ export default {
         this.listLoading = false
       })
     },
-    // 数据过滤
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
     },
-    // 改变每页项数
     handleSizeChange(val) {
       this.listQuery.limit = val
       this.getList()
     },
-    // 当前页
     handleCurrentChange(val) {
       this.listQuery.page = val
       this.getList()
     },
-    // 重置临时数据
+    // 添加
     resetTemp() {
       this.temp = {
         id: undefined,
@@ -291,70 +408,88 @@ export default {
         packageSize: ''
       }
     },
-    // 处理创建表单
+    handleSync() {
+      this.resetTemp()
+      this.dialogStatus = 'create'
+      this.syncFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
+    // handleEdit() {
+    //   this.editFormVisible = true
+    // },
     handleCreate() {
       this.resetTemp()
       this.dialogStatus = 'create'
-      this.dialogFormVisible = true
+      this.syncFormVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()
       })
     },
-    createData() {
-      this.$refs['dataForm'].validate((valid) => {
-        if (valid) {
-          this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          createProduct(this.temp).then(() => {
-            this.list.unshift(this.temp)
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '成功',
-              message: '创建成功',
-              type: 'success',
-              duration: 2000
-            })
-          })
-        }
-      })
+    syncData() {
+      console.log('同步中。。。')
+      this.syncProcessVisable = true
+      // this.$refs['dataForm'].validate((valid) => {
+      //   if (valid) {
+      //     this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
+      //     // createProduct(this.temp).then(() => {
+      //     //   this.list.unshift(this.temp)
+      //     //   this.syncFormVisible = false
+      //     //   this.$notify({
+      //     //     title: '成功',
+      //     //     message: '创建成功',
+      //     //     type: 'success',
+      //     //     duration: 2000
+      //     //   })
+      //     // })
+      //   }
+      // })
     },
     // 编辑
     handleUpdate(row) {
-      this.fileList = row.images
-      this.temp = Object.assign({}, row) // copy obj
-      this.temp.timestamp = new Date(this.temp.timestamp)
-      this.dialogStatus = 'update'
-      this.dialogFormVisible = true
-      this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
-      })
+      this.editFormVisible = true
+      this.order = Object.assign({}, row)
+      // this.fileList = row.images
+      // this.temp = Object.assign({}, row) // copy obj
+      // this.temp.timestamp = new Date(this.temp.timestamp)
+      // this.dialogStatus = 'update'
+      // this.syncFormVisible = true
+      // this.$nextTick(() => {
+      //   this.$refs['dataForm'].clearValidate()
+      // })
     },
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
           tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateProduct(tempData).then(() => {
-            for (const v of this.list) {
-              if (v.id === this.temp.id) {
-                const index = this.list.indexOf(v)
-                this.list.splice(index, 1, this.temp)
-                break
-              }
-            }
-            this.dialogFormVisible = false
-            this.$notify({
-              title: '成功',
-              message: '更新成功',
-              type: 'success',
-              duration: 2000
-            })
-          })
+          // updateProduct(tempData).then(() => {
+          //   for (const v of this.list) {
+          //     if (v.id === this.temp.id) {
+          //       const index = this.list.indexOf(v)
+          //       this.list.splice(index, 1, this.temp)
+          //       break
+          //     }
+          //   }
+          //   this.syncFormVisible = false
+          //   this.$notify({
+          //     title: '成功',
+          //     message: '更新成功',
+          //     type: 'success',
+          //     duration: 2000
+          //   })
+          // })
         }
       })
     },
-    cancelData() {
-      this.dialogFormVisible = false
+    cancelSyncData() {
+      this.syncFormVisible = false
+      this.syncProcessVisable = false
       this.fileList = []
+    },
+    cancelEditData() {
+      this.editFormVisible = false
     },
     // 删除
     handleDelete(row) {
@@ -488,8 +623,4 @@ export default {
 .el-dialog__body {
   padding: 0px 20px;
 }
-// .form-container {
-//   padding-top: 5px;
-//   border: 1px solid gray
-// }
 </style>

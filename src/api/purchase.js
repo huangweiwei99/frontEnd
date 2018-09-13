@@ -23,3 +23,25 @@ export function updatePurchase(data) {
     data
   })
 }
+
+export function fetchSupplierList(query) {
+  return request({
+    url: '/supplier/list2',
+    method: 'get',
+    params: query
+  })
+}
+
+export function fetchProductList(id) {
+  return request({
+    url: '/supplier/' + id + '/product/list',
+    method: 'get'
+  })
+}
+
+export function fetchPurchase(id) {
+  return request({
+    url: '/purchase/list/' + id,
+    method: 'get'
+  })
+}

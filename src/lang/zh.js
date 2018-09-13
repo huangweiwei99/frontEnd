@@ -117,7 +117,8 @@ export default {
     range: '排序',
     sortFiled: '排序域',
     exportFileName: '文件名',
-    return: '返回'
+    return: '返回',
+    save: '保存'
   },
   errorLog: {
     tips: '请点击右上角bug小图标',
@@ -159,7 +160,22 @@ export default {
   },
   purchase: {
     date: '采购日期',
-    purchasetransid: '交易号'
+    purchasetransid: '交易号',
+    optsupplier: '请选择供应商',
+    place: '采购地点',
+    quantity: '采购数量',
+    price: '价格'
+  },
+  order: {
+    date: '交易日期',
+    transId: '交易号',
+    express: '快递',
+    status: '状态',
+    account: '账号',
+    dateRange: '日期范围',
+    platform: '平台',
+    sync: '同步',
+    orderId: '订单号'
   },
   rule: {
     productName: '产品名称不能空',
