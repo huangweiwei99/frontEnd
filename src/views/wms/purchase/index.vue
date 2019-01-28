@@ -198,6 +198,21 @@ export default {
         callback()
       }
     }
+    var checkPlace = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('采购地点不能为空'))
+      } else {
+        callback()
+      }
+    }
+    var checkDate = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('采购日期不能为空'))
+      } else {
+        callback()
+      }
+    }
+
     return {
       tableKey: 0,
       activeName: 'first',
@@ -233,7 +248,9 @@ export default {
       },
       advanceVisable: false,
       rules: {
-        purchasetransid: [{ required: true, validator: checkPurchaseTransId, trigger: 'blur' }]
+        purchasetransid: [{ required: true, validator: checkPurchaseTransId, trigger: 'blur' }],
+        place: [{ required: true, validator: checkPlace, trigger: 'blur' }],
+        date: [{ required: true, validator: checkDate, trigger: 'blur' }]
       },
       downloadLoading: false,
       multipleSelection: [],
@@ -270,26 +287,28 @@ export default {
       this.form.products = []
     },
     getProductsList() {
-      console.log(this.temp.supplier)
       this.supplierQuery.id = this.temp.supplier
       fetchProductList(this.temp.supplier).then(response => {
         this.form.products = response.data.items
         this.listLoading = false
       })
     },
+    // 数据过滤
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
     },
+    // 改变每页项数
     handleSizeChange(val) {
       this.listQuery.limit = val
       this.getList()
     },
+    // 当前页
     handleCurrentChange(val) {
       this.listQuery.page = val
       this.getList()
     },
-    // 添加
+    // 重置临时数据
     resetTemp() {
       this.temp = {
         id: undefined,
@@ -300,6 +319,7 @@ export default {
         supplier: ''
       }
     },
+    // 处理创建表单
     handleCreate() {
       this.baseVisible = false
       this.formStatus = 'create'
@@ -311,6 +331,7 @@ export default {
       //   this.$refs['dataForm'].clearValidate()
       // })
     },
+    // 创建数据
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
@@ -341,6 +362,7 @@ export default {
     //     this.$refs['dataForm'].clearValidate()
     //   })
     // },
+    // 处理更新表单
     handleUpdate(row) {
       this.baseVisible = false
       this.formStatus = 'update'
@@ -360,6 +382,7 @@ export default {
       //   place: ''
       // },
     },
+    // 更新数据
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
@@ -384,11 +407,12 @@ export default {
         }
       })
     },
+    // 取消数据
     cancelData() {
       this.dialogFormVisible = false
       this.fileList = []
     },
-    // 删除
+    // 处理删除数据
     handleDelete(row) {
       this.$notify({
         title: '成功',
@@ -399,10 +423,11 @@ export default {
       const index = this.list.indexOf(row)
       this.list.splice(index, 1)
     },
-    // 高级面板
+    // 处理高级面板
     handleAdanceToggle() {
       this.advanceVisable = !this.advanceVisable
     },
+    // 处理重置高级表单
     handleAdvanceReset() {
       this.listQuery.page = 1
       this.listQuery.purchasetransid = null

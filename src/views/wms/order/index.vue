@@ -148,9 +148,9 @@
             <el-date-picker v-model="temp.dateRange" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions2">
             </el-date-picker>
           </el-form-item>
-          <el-form-item :label="$t('order.platform')" prop="platfrom">
-            <el-select v-model="temp.platfrom" placeholder="请选择">
-              <el-option v-for="item in platfromOptions" :key="item.value" :label="item.label" :value="item.value">
+          <el-form-item :label="$t('order.platform')" prop="platform">
+            <el-select v-model="temp.platform" placeholder="请选择">
+              <el-option v-for="item in platformOptions" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
           </el-form-item>
@@ -213,42 +213,51 @@ export default {
     waves
   },
   data() {
-    var checkSku = (rule, value, callback) => {
+    var checkDateRange = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error('SKU不能为空'))
-      } else if (value.length !== 6) {
-        return callback(new Error('SKU长度为6位'))
-      } else if (!/^[A]{1}[0-9]{5}$/.test(value)) {
-        return callback(new Error('SKU模式错误，格式：A00000'))
+        return callback(new Error('时间跨度不能为空'))
       } else {
         callback()
       }
     }
-    var checkName = (rule, value, callback) => {
+    var checkPlatform = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error('产品名称不能为空'))
-      } else if (value.length < 2) {
-        return callback(new Error('产品名称至少两个字符'))
-      } else if (value.length > 100) {
-        return callback(new Error('产品名称最多100个字符'))
+        return callback(new Error('平台不能为空'))
       } else {
         callback()
       }
     }
-    var checkPackageWeight = (rule, value, callback) => {
+    var checkAccount = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error('包装重量不能为空'))
-      } else if (!/^\d+$/.test(value)) {
-        return callback(new Error('包装重量为整数'))
+        return callback(new Error('账号不能为空'))
       } else {
         callback()
       }
     }
-    var checkPackageSize = (rule, value, callback) => {
+    var checkOrderDate = (rule, value, callback) => {
       if (!value) {
-        return callback(new Error('包装尺寸不能为空'))
-      } else if (!/^[\d+]{1,4}[*][\d+]{1,4}[*][\d+]{1,4}$/.test(value)) {
-        return callback(new Error('包装尺寸错误，请输入1111*2222*3333'))
+        return callback(new Error('订单日期不能为空'))
+      } else {
+        callback()
+      }
+    }
+    var checkOrderId = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('订单ID不能为空'))
+      } else {
+        callback()
+      }
+    }
+    var checkExpress = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('快递不能为空'))
+      } else {
+        callback()
+      }
+    }
+    var checkStatus = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('状态不能为空'))
       } else {
         callback()
       }
@@ -277,7 +286,7 @@ export default {
         id: undefined,
         dateRange: '',
         account: '',
-        platfrom: ''
+        platform: ''
       },
       order: {
         date: '',
@@ -295,10 +304,13 @@ export default {
       },
       advanceVisable: false,
       rules: {
-        name: [{ required: true, validator: checkName, trigger: 'blur' }],
-        sku: [{ required: true, validator: checkSku, trigger: 'blur' }],
-        packageWeight: [{ required: true, validator: checkPackageWeight, trigger: 'blur' }],
-        packageSize: [{ required: true, validator: checkPackageSize, trigger: 'blur' }]
+        platform: [{ required: true, validator: checkPlatform, trigger: 'blur' }],
+        dateRange: [{ required: true, validator: checkDateRange, trigger: 'blur' }],
+        account: [{ required: true, validator: checkAccount, trigger: 'blur' }],
+        date: [{ required: true, validator: checkOrderDate, trigger: 'blur' }],
+        orderId: [{ required: true, validator: checkOrderId, trigger: 'blur' }],
+        express: [{ required: true, validator: checkExpress, trigger: 'blur' }],
+        status: [{ required: true, validator: checkStatus, trigger: 'blur' }]
       },
       pickerOptions2: {
         shortcuts: [{
@@ -326,7 +338,7 @@ export default {
           }
         }]
       },
-      platfromOptions: [{
+      platformOptions: [{
         value: '1',
         label: 'ebay'
       }, {
@@ -384,19 +396,22 @@ export default {
         this.listLoading = false
       })
     },
+    // 数据过滤
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
     },
+    // 改变每页项数
     handleSizeChange(val) {
       this.listQuery.limit = val
       this.getList()
     },
+    // 当前页
     handleCurrentChange(val) {
       this.listQuery.page = val
       this.getList()
     },
-    // 添加
+    // 重置临时数据
     resetTemp() {
       this.temp = {
         id: undefined,
@@ -419,6 +434,7 @@ export default {
     // handleEdit() {
     //   this.editFormVisible = true
     // },
+    // 处理创建表单
     handleCreate() {
       this.resetTemp()
       this.dialogStatus = 'create'
@@ -446,7 +462,7 @@ export default {
       //   }
       // })
     },
-    // 编辑
+    // 处理更新表单
     handleUpdate(row) {
       this.editFormVisible = true
       this.order = Object.assign({}, row)
@@ -459,6 +475,7 @@ export default {
       //   this.$refs['dataForm'].clearValidate()
       // })
     },
+    // 更新数据
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
@@ -491,7 +508,7 @@ export default {
     cancelEditData() {
       this.editFormVisible = false
     },
-    // 删除
+    // 处理删除数据
     handleDelete(row) {
       this.$notify({
         title: '成功',

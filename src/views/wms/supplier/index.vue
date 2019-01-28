@@ -150,6 +150,13 @@ export default {
         callback()
       }
     }
+    var checkPlatform = (rule, value, callback) => {
+      if (!value) {
+        return callback(new Error('供应商不能为空'))
+      } else {
+        callback()
+      }
+    }
     var checkAddress = (rule, value, callback) => {
       if (!value) {
         return callback(new Error('地址不能为空'))
@@ -186,7 +193,8 @@ export default {
       advanceVisable: false,
       rules: {
         name: [{ required: true, validator: checkName, trigger: 'blur' }],
-        address: [{ required: true, validator: checkAddress, trigger: 'blur' }]
+        address: [{ required: true, validator: checkAddress, trigger: 'blur' }],
+        platform: [{ required: true, validator: checkPlatform, trigger: 'blur' }]
       },
       downloadLoading: false,
       multipleSelection: [],
@@ -206,19 +214,22 @@ export default {
         this.listLoading = false
       })
     },
+    // 数据过滤
     handleFilter() {
       this.listQuery.page = 1
       this.getList()
     },
+    // 改变每页项数
     handleSizeChange(val) {
       this.listQuery.limit = val
       this.getList()
     },
+    // 当前页
     handleCurrentChange(val) {
       this.listQuery.page = val
       this.getList()
     },
-    // 添加
+    // 重置临时数据
     resetTemp() {
       this.temp = {
         id: undefined,
@@ -229,6 +240,7 @@ export default {
         address: ''
       }
     },
+    // 处理创建表单
     handleCreate() {
       this.resetTemp()
       this.dialogStatus = 'create'
@@ -237,6 +249,7 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
     },
+    // 创建数据
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
@@ -254,7 +267,7 @@ export default {
         }
       })
     },
-    // 编辑
+    // 处理更新表单
     handleUpdate(row) {
       this.fileList = row.images
       this.temp = Object.assign({}, row) // copy obj
@@ -265,6 +278,7 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
     },
+    // 更新数据
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
@@ -289,11 +303,12 @@ export default {
         }
       })
     },
+    // 取消数据
     cancelData() {
       this.dialogFormVisible = false
       this.fileList = []
     },
-    // 删除
+    // 处理删除数据
     handleDelete(row) {
       this.$notify({
         title: '成功',

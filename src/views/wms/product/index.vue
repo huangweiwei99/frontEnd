@@ -69,7 +69,7 @@
           </el-form>
           <el-col :span="6">
             <span style="display: inline-block;padding-right: 10px;position:absolute;right:0px;">
-              <input id="excel-upload-input" type="file" accept=".xlsx, .xls" class="c-hide" @change="handkeFileChange">
+              <input id="excel-upload-input" type="file" accept=".xlsx, .xls" class="c-hide" @change="handleFileChange">
               <el-button class="filter-item" icon="el-icon-upload2" @click="handleUpload">导入</el-button>
               <el-button class="filter-item" icon="el-icon-download" @click="handleDownload" :loading="downloadLoading" v-waves>{{$t('table.export')}}</el-button>
             </span>
@@ -300,6 +300,7 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
     },
+    // 创建数据
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
@@ -317,7 +318,7 @@ export default {
         }
       })
     },
-    // 编辑
+    // 处理更新表单
     handleUpdate(row) {
       this.fileList = row.images
       this.temp = Object.assign({}, row) // copy obj
@@ -328,6 +329,7 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
     },
+    // 更新数据
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
@@ -352,11 +354,12 @@ export default {
         }
       })
     },
+    // 取消数据
     cancelData() {
       this.dialogFormVisible = false
       this.fileList = []
     },
-    // 删除
+    // 处理删除数据
     handleDelete(row) {
       this.$notify({
         title: '成功',
@@ -367,10 +370,11 @@ export default {
       const index = this.list.indexOf(row)
       this.list.splice(index, 1)
     },
-    // 高级面板
+    // 处理高级面板
     handleAdanceToggle() {
       this.advanceVisable = !this.advanceVisable
     },
+    // 处理重置高级表单
     handleAdvanceReset() {
       this.listQuery.page = 1
       this.listQuery.sku = null
@@ -391,7 +395,7 @@ export default {
     handleUpload() {
       document.getElementById('excel-upload-input').click()
     },
-    handkeFileChange(e) {
+    handleFileChange(e) {
       const files = e.target.files
       const itemFile = files[0] // only use files[0]
       // console.log(itemFile)
@@ -488,8 +492,5 @@ export default {
 .el-dialog__body {
   padding: 0px 20px;
 }
-// .form-container {
-//   padding-top: 5px;
-//   border: 1px solid gray
-// }
+
 </style>
