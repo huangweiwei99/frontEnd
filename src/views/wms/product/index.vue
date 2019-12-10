@@ -1,163 +1,446 @@
 <template>
   <div class="app-container calendar-list-container">
     <!-- 过滤器 -->
-    <div class="filter-container">
-      <el-button class="filter-item" icon="el-icon-edit" @click="handleCreate">{{$t('table.add')}}</el-button>
-      <span class="right">
-        <el-button class="filter-item" icon="el-icon-search" @click="handleAdanceToggle">{{$t('table.advance')}}</el-button>
-      </span>
-      <div class="form-container" v-if="advanceVisable">
-        <el-row :gutter="24">
-          <el-form label-position="left" label-width="70px">
-            <el-col :span="6">
-              <el-form-item :label="$t('product.name')" prop="name">
-                <el-input v-model="listQuery.name" prefix-icon="el-icon-edit"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item :label="$t('product.sku')" prop="sku">
-                <el-input v-model="listQuery.sku" prefix-icon="el-icon-tickets"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item :label="$t('product.packageWeight')" prop="packageWeight">
-                <el-input v-model="listQuery.packageWeight" prefix-icon="el-icon-remove-outline"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item>
-                <el-radio-group v-model="listQuery.range">
-                  <el-radio label="desc">倒序</el-radio>
-                  <el-radio label="asc">顺序</el-radio>
-                </el-radio-group>
-              </el-form-item>
-            </el-col>
-          </el-form>
-        </el-row>
-        <el-row :gutter="24">
-          <el-form label-position="left" label-width="70px">
-            <el-col :span="12">
-              <el-form-item :label="$t('table.sortFiled')" prop="packageWeight">
-                <el-select style="width: 140px" class="filter-item" v-model="listQuery.sort">
-                  <el-option key="name" :label="$t('product.name')" value="name"></el-option>
-                  <el-option key="sku" :label="$t('product.sku')" value="sku"></el-option>
-                  <el-option key="packageWeight" :label="$t('product.packageWeight')" value="packageWeight"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
+    <div>
+      <div class="filter-container">
+        <!-- 高级搜索按钮 -->
+        <div>
+          <el-button
+            class="filter-item"
+            icon="el-icon-third-add"
+            @click="handleCreate"
+          >{{$t('table.add')}}</el-button>
 
-            </el-col>
-          </el-form>
-          <el-col :span="6">
-            <span style="display: inline-block;padding-right: 10px;position:absolute;right:0px;">
-              <el-button type="primary" icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>
-              <el-button type="danger" icon="el-icon-refresh" @click="handleAdvanceReset">{{$t('table.reset')}}</el-button>
-            </span>
-          </el-col>
-        </el-row>
-        <el-row :gutter="24">
-          <el-form label-position="left" label-width="70px">
-            <el-col :span="12">
-              <el-form-item :label="$t('table.exportFileName')" prop="packageWeight">
-                <el-input style='width:340px;' :placeholder="$t('excel.placeholder')" prefix-icon="el-icon-document" v-model="filename"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
+          <el-button
+            class="filter-item"
+            icon="el-icon-third-query1"
+            @click="handleAdanceToggle"
+            style="float:right"
+          >{{$t('table.advance')}}</el-button>
 
-            </el-col>
-          </el-form>
-          <el-col :span="6">
-            <span style="display: inline-block;padding-right: 10px;position:absolute;right:0px;">
-              <input id="excel-upload-input" type="file" accept=".xlsx, .xls" class="c-hide" @change="handleFileChange">
-              <el-button class="filter-item" icon="el-icon-upload2" @click="handleUpload">导入</el-button>
-              <el-button class="filter-item" icon="el-icon-download" @click="handleDownload" :loading="downloadLoading" v-waves>{{$t('table.export')}}</el-button>
-            </span>
-          </el-col>
-        </el-row>
+        </div>
+        <!-- 高级搜索表单 -->
+        <div
+          class="form-container"
+          v-if="advanceVisable"
+        >
+          <el-row :gutter="24">
+            <el-form
+              label-position="left"
+              label-width="70px"
+            >
+              <el-col
+                :span="6"
+                :xs="24"
+                :sm="12"
+                :lg="6"
+              >
+                <el-form-item
+                  :label="$t('product.name')"
+                  prop="name"
+                >
+                  <el-input
+                    v-model="listQuery.name"
+                    prefix-icon="el-icon-third-product1"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col
+                :span="6"
+                :xs="24"
+                :sm="12"
+                :lg="6"
+              >
+                <el-form-item
+                  :label="$t('product.sku')"
+                  prop="sku"
+                >
+                  <el-input
+                    v-model="listQuery.sku"
+                    prefix-icon="el-icon-third-cuxiaohuodong-SKUdazhe"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col
+                :span="6"
+                :xs="24"
+                :sm="12"
+                :lg="6"
+              >
+                <el-form-item
+                  :label="$t('product.weight')"
+                  prop="weight"
+                >
+                  <el-input
+                    v-model="listQuery.weight"
+                    prefix-icon="el-icon-third-Weight"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col
+                :span="6"
+                :xs="24"
+                :sm="12"
+                :lg="6"
+              >
+                <el-form-item style="margin-bottom:50px">
+
+                  <span>
+                    <el-button-group class="filter-containter-button-group">
+                      <el-button
+                        plain
+                        icon="el-icon-search"
+                        @click="handleFilter"
+                      >{{$t('table.search')}}</el-button>
+                      <el-button
+                        plain
+                        icon="el-icon-refresh"
+                        @click="handleAdvanceReset"
+                      >{{$t('table.reset')}}</el-button>
+                    </el-button-group>
+
+                  </span>
+                </el-form-item>
+              </el-col>
+            </el-form>
+          </el-row>
+          <el-row :gutter="24">
+            <el-form
+              label-position="left"
+              label-width="70px"
+            >
+              <el-col
+                :span="6"
+                :xs="24"
+                :sm="12"
+                :lg="6"
+              >
+                <el-form-item :label="$t('table.exportFileName')">
+                  <el-input
+                    :placeholder="$t('excel.placeholder')"
+                    prefix-icon="el-icon-document"
+                    v-model="filename"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col
+                :span="6"
+                :xs="24"
+                :sm="12"
+                :lg="6"
+              >
+                <el-form-item style="margin-bottom:50px">
+                  <input
+                    id="excel-upload-input"
+                    type="file"
+                    accept=".xlsx, .xls"
+                    class="c-hide"
+                    @change="handleFileChange"
+                  >
+                  <el-button-group class="filter-containter-button-group">
+                    <el-button
+                      class="filter-item"
+                      icon="el-icon-upload2"
+                      @click="handleUpload"
+                    >导入</el-button>
+                    <el-button
+                      class="filter-item"
+                      icon="el-icon-download"
+                      @click="handleDownload"
+                      :loading="downloadLoading"
+                      v-waves
+                    >{{$t('table.export')}}</el-button>
+                  </el-button-group>
+                </el-form-item>
+              </el-col>
+            </el-form>
+          </el-row>
+        </div>
       </div>
     </div>
-    <!-- 表格 -->
-    <el-table :key='tableKey' :data="list" v-loading="listLoading" :element-loading-text="$t('table.loadingText')" border fit highlight-current-row @selection-change="handleSelectionChange" style="width: 100%">
-      <el-table-column type="selection" align="center"></el-table-column>
-      <el-table-column width="110px" align="center" :label="$t('product.sku')">
-        <template slot-scope="scope">
-          <span>{{scope.row.sku}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column min-width="365px" align="center" :label="$t('product.name')">
-        <template slot-scope="scope">
-          <span class="link-type" @click="handleUpdate(scope.row)">{{scope.row.name}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column width="80px" align="center" :label="$t('product.packageWeight')">
-        <template slot-scope="scope">
-          <span>{{scope.row.packageWeight}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" :label="$t('product.packageSize')" width="95">
-        <template slot-scope="scope">
-          <span>{{scope.row.packageSize}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" :label="$t('table.actions')" width="150" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('table.edit')}}</el-button>
-          <el-button size="mini" type="danger" @click="handleDelete(scope.row)">{{$t('table.delete')}}
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <!-- 分页导航 -->
-    <div class="pagination-container">
-      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
-      </el-pagination>
+    <div>
+      <!-- 表格 -->
+      <el-table
+        :key='tableKey'
+        :data="list"
+        v-loading="listLoading"
+        :element-loading-text="$t('table.loadingText')"
+        border
+        fit
+        highlight-current-row
+        @selection-change="handleSelectionChange"
+        :default-sort="{prop: 'id', order: 'descending'}"
+        @sort-change="handleSort"
+        class="data-table"
+        stripe
+        :max-height="this.$store.state.app.table.height"
+      >
+        <el-table-column
+          type="selection"
+          align="center"
+          prop="id"
+        ></el-table-column>
+
+        <el-table-column
+          align="center"
+          sortable="custom"
+          prop="sku"
+          fixed
+          :label="$t('product.sku')"
+          :render-header="renderHeader"
+        >
+          <template slot-scope="scope">
+
+            <span
+              class="link-type"
+              @click="handleUpdate(scope.row)"
+            >{{scope.row.sku}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          :label="$t('product.name')"
+          sortable="custom"
+          prop="name"
+          :render-header="renderHeader"
+        >
+          <template slot-scope="scope">
+            <span>{{scope.row.name}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          :label="$t('product.weight')"
+          sortable="custom"
+          prop="weight"
+          :render-header="renderHeader"
+        >
+          <template slot-scope="scope">
+            <span>{{scope.row.weight}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          :label="$t('product.dimension')"
+          prop="dimension"
+          :render-header="renderHeader"
+        >
+          <template slot-scope="scope">
+            <span>{{scope.row.dimension}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          align="center"
+          :label="$t('table.actions')"
+          class-name="small-padding fixed-width"
+          width="170"
+          prop="action"
+          :render-header="renderHeader"
+        >
+          <template slot-scope="scope">
+            <el-button-group>
+              <el-button
+                type="primary"
+                size="mini"
+                icon="el-icon-edit"
+                @click="handleUpdate(scope.row)"
+              >{{$t('table.edit')}}</el-button>
+              <el-button
+                size="mini"
+                type="danger"
+                icon="el-icon-delete"
+                @click="handleDelete(scope.row)"
+              >{{$t('table.delete')}}
+              </el-button>
+            </el-button-group>
+          </template>
+        </el-table-column>
+        <el-table-column
+          type="expand"
+          fixed="right"
+        >
+          <template slot-scope="props">
+
+            <el-form
+              label-position="right"
+              inline
+              class="demo-table-expand"
+            >
+              <el-row :gutter="24">
+                <el-col
+                  :span="6"
+                  :xs="24"
+                  :sm="12"
+                  :lg="6"
+                >
+                  <el-form-item label="商品名称">
+                    <span>{{ props.row.name }}</span>
+
+                  </el-form-item>
+                </el-col>
+                <el-col
+                  :span="6"
+                  :xs="24"
+                  :sm="12"
+                  :lg="6"
+                >
+                  <el-form-item label="商品sku">
+                    <span>{{ props.row.sku }}</span>
+
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </el-form>
+          </template>
+        </el-table-column>
+      </el-table>
+      <!-- 分页导航 -->
+
+      <div class="pagination-container">
+        <el-pagination
+          background
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page.sync="listQuery.page"
+          :page-sizes="[10,20,30, 50]"
+          :page-size="listQuery.limit"
+          :layout="this.$store.state.app.pagation.layout"
+          :total="total"
+        >
+        </el-pagination>
+      </div>
     </div>
     <!-- 编辑对话框 -->
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" :before-close="cancelData">
+    <el-dialog
+      :title=$t(textMap[dialogStatus])
+      :visible.sync="dialogFormVisible"
+      :before-close="cancelData"
+      center
+      :fullscreen="this.$store.state.app.dialog.fullScreen"
+    >
       <template>
         <el-tabs v-model="activeName">
-          <el-tab-pane label="产品信息" name="first">
-            <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="80px" style='width: 400px; margin-left:50px;'>
-              <el-form-item :label="$t('table.title')" prop="name">
-                <el-input v-model="temp.name" prefix-icon="el-icon-edit"></el-input>
+          <el-tab-pane name="first">
+            <span slot="label"><i class="el-icon-third-qiyechanpinxinxi"></i> {{$t('product.info')}}</span>
+            <el-form
+              :rules="rules"
+              ref="dataForm"
+              :model="temp"
+              label-position="left"
+              label-width="80px"
+            >
+              <el-form-item
+                :label="$t('supplier.name')"
+                prop="supplier"
+              >
+                <el-select
+                  v-model="temp.supplier"
+                  :placeholder="$t('purchase.optsupplier')"
+                >
+                  <el-option
+                    v-for="item in suppliersopts"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="item.id"
+                  >
+                  </el-option>
+                </el-select>
               </el-form-item>
-              <el-form-item :label="$t('product.sku')" prop="sku">
-                <el-input v-model="temp.sku" prefix-icon="el-icon-tickets"></el-input>
+              <el-form-item
+                :label="$t('table.title')"
+                prop="name"
+              >
+                <el-input
+                  v-model="temp.name"
+                  prefix-icon="el-icon-third-product1"
+                ></el-input>
               </el-form-item>
-              <el-form-item :label="$t('product.packageWeight')" prop="packageWeight">
-                <el-input v-model="temp.packageWeight" prefix-icon="el-icon-remove-outline"></el-input>
+              <el-form-item
+                :label="$t('product.sku')"
+                prop="sku"
+              >
+                <el-input
+                  v-model="temp.sku"
+                  prefix-icon="el-icon-third-cuxiaohuodong-SKUdazhe"
+                ></el-input>
               </el-form-item>
-              <el-form-item :label="$t('product.packageSize')" prop="packageSize">
-                <el-input v-model="temp.packageSize" prefix-icon="el-icon-message"></el-input>
+              <el-form-item
+                :label="$t('product.weight')"
+                prop="weight"
+              >
+                <el-input
+                  v-model="temp.weight"
+                  prefix-icon="el-icon-third-Weight"
+                ></el-input>
               </el-form-item>
-              <el-form-item :label="$t('product.remark')">
-                <el-input type="textarea" :autosize="{ minRows: 2, maxRows: 4}" v-model="temp.remark">
-                </el-input>
+              <el-form-item
+                :label="$t('product.dimension')"
+                prop="dimension"
+              >
+                <el-input
+                  v-model="temp.dimension"
+                  prefix-icon="el-icon-third-multidimensional24"
+                ></el-input>
               </el-form-item>
+
             </el-form>
           </el-tab-pane>
-          <el-tab-pane label="产品图片" name="second">
-            <el-upload ref="upload" action="https://jsonplaceholder.typicode.com/posts/" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove" :file-list="fileList">
+          <el-tab-pane name="second">
+            <span slot="label"><i class="el-icon-third-tupian1"></i> {{$t('product.images')}}</span>
+            <el-upload
+              ref="upload"
+              :action="picturePostUrl"
+              list-type="picture-card"
+              :on-preview="handlePictureCardPreview"
+              :on-remove="handleRemove"
+              :on-change="onChange"
+              :file-list="fileList"
+              :auto-upload=false
+            >
               <i class="el-icon-plus"></i>
             </el-upload>
-            <el-dialog :visible.sync="dialogVisible" append-to-body>
-              <img width="100%" :src="dialogImageUrl" alt="">
+            <el-dialog
+              :visible.sync="dialogVisible"
+              append-to-body
+            >
+              <img
+                width="100%"
+                :src="dialogImageUrl"
+                alt=""
+              >
             </el-dialog>
           </el-tab-pane>
         </el-tabs>
       </template>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="cancelData" icon="el-icon-close">{{$t('table.cancel')}}</el-button>
-        <el-button v-if="dialogStatus=='create'" type="primary" @click="createData" icon="el-icon-check">{{$t('table.confirm')}}</el-button>
-        <el-button v-else type="primary" @click="updateData" icon="el-icon-check">{{$t('table.confirm')}}</el-button>
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button
+          @click="cancelData"
+          icon="el-icon-close"
+        >{{$t('table.cancel')}}</el-button>
+        <el-button
+          v-if="dialogStatus=='create'"
+          type="primary"
+          @click="createData"
+          autofocus
+          icon="el-icon-check"
+        >{{$t('table.confirm')}}</el-button>
+        <el-button
+          v-else
+          type="primary"
+          @click="updateData"
+          autofocus
+          icon="el-icon-check"
+        >{{$t('table.confirm')}}</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-import { fetchList, createProduct, updateProduct } from '@/api/product'
+import { fetchList, getProduct, createProduct, updateProduct, fetchSupplierList, deleteProduct, deleteProductImagebyImageId, saveImageByProductId } from '@/api/product'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 import XLSX from 'xlsx'
@@ -168,7 +451,7 @@ export default {
     waves
   },
   data() {
-    var checkSku = (rule, value, callback) => {
+    const checkSku = (rule, value, callback) => {
       if (!value) {
         return callback(new Error('SKU不能为空'))
       } else if (value.length !== 6) {
@@ -179,7 +462,7 @@ export default {
         callback()
       }
     }
-    var checkName = (rule, value, callback) => {
+    const checkName = (rule, value, callback) => {
       if (!value) {
         return callback(new Error('产品名称不能为空'))
       } else if (value.length < 2) {
@@ -190,7 +473,14 @@ export default {
         callback()
       }
     }
-    var checkPackageWeight = (rule, value, callback) => {
+    const checkSupplier = (rule, value, callback) => {
+      if (typeof value !== 'number') {
+        return callback(new Error('请选择正确的供应商'))
+      } else {
+        callback()
+      }
+    }
+    const checkWeight = (rule, value, callback) => {
       if (!value) {
         return callback(new Error('包装重量不能为空'))
       } else if (!/^\d+$/.test(value)) {
@@ -199,7 +489,7 @@ export default {
         callback()
       }
     }
-    var checkPackageSize = (rule, value, callback) => {
+    const checkDimension = (rule, value, callback) => {
       if (!value) {
         return callback(new Error('包装尺寸不能为空'))
       } else if (!/^[\d+]{1,4}[*][\d+]{1,4}[*][\d+]{1,4}$/.test(value)) {
@@ -222,17 +512,21 @@ export default {
         limit: 20,
         name: undefined,
         sort: 'sku',
-        range: 'asc'
+        order: 'desc'
       },
+      dialogFullScreen: false,
       temp: {
         id: undefined,
         remark: '',
         timestamp: new Date(),
         name: '',
         sku: '',
-        packageWeight: '',
-        packgeSize: ''
+        weight: '',
+        dimension: '',
+        supplier: '',
+        images: []
       },
+      picturePostUrl: '',
       dialogFormVisible: false,
       dialogStatus: '',
       textMap: {
@@ -242,27 +536,66 @@ export default {
       advanceVisable: false,
       rules: {
         name: [{ required: true, validator: checkName, trigger: 'blur' }],
+        supplier: [{ required: true, validator: checkSupplier, trigger: 'blur' }],
         sku: [{ required: true, validator: checkSku, trigger: 'blur' }],
-        packageWeight: [{ required: true, validator: checkPackageWeight, trigger: 'blur' }],
-        packageSize: [{ required: true, validator: checkPackageSize, trigger: 'blur' }]
+        weight: [{ required: true, validator: checkWeight, trigger: 'blur' }],
+        dimension: [{ required: true, validator: checkDimension, trigger: 'blur' }]
       },
+      suppliersopts: [],
       downloadLoading: false,
       multipleSelection: [],
       filename: ''
     }
-  },
-  created() {
-    this.getList()
   },
   methods: {
     // 数据列表
     getList() {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
+        if (response.code === 200) {
+          fetchSupplierList().then(response => {
+            this.suppliersopts = response.data.items
+            this.listLoading = false
+          })
+        }
         this.list = response.data.items
         this.total = response.data.total
         this.listLoading = false
       })
+    },
+    renderHeader(h, { column }) { // h即为cerateElement的简写，具体可看vue官方文档
+      // console.log(column)
+      let icon = ''
+      switch (column.property) {
+        case 'sku':
+          icon = 'el-icon-third-cuxiaohuodong-SKUdazhe'
+          break
+        case 'name':
+          icon = 'el-icon-third-product1'
+          break
+        case 'weight':
+          icon = 'el-icon-third-Weight'
+          break
+        case 'dimension':
+          icon = 'el-icon-third-multidimensional24'
+          break
+        case 'action':
+          icon = 'el-icon-third-caozuogongneng'
+          break
+        default:
+          break
+      }
+      return h(
+        'span',
+        [
+
+          h('i', {
+            class: icon,
+            style: 'padding-right:5px'
+          }),
+          h('span', column.label)
+        ],
+      )
     },
     // 数据过滤
     handleFilter() {
@@ -279,6 +612,24 @@ export default {
       this.listQuery.page = val
       this.getList()
     },
+    // 远程排序
+    handleSort(val) {
+      this.listQuery.page = 1
+      this.listQuery.sort = val.prop
+      switch (val.order) {
+        case 'ascending':
+          val.order = 'asc'
+          break
+        case 'descending':
+          val.order = 'desc'
+          break
+        default:
+          val.order = null
+          break
+      }
+      this.listQuery.order = val.order
+      this.getList()
+    },
     // 重置临时数据
     resetTemp() {
       this.temp = {
@@ -287,13 +638,15 @@ export default {
         timestamp: new Date(),
         name: '',
         sku: '',
-        packageWeight: '',
-        packageSize: ''
+        weight: '',
+        dimension: '',
+        supplier: ''
       }
     },
     // 处理创建表单
     handleCreate() {
       this.resetTemp()
+      this.picturePostUrl = ''
       this.dialogStatus = 'create'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -302,16 +655,38 @@ export default {
     },
     // 创建数据
     createData() {
+      const formData = new FormData()
+      this.fileList.forEach((file) => {
+        formData.append('images[]', file.raw)
+      })
+      formData.append('name', this.temp.name)
+      formData.append('sku', this.temp.sku)
+      formData.append('weight', this.temp.weight)
+      formData.append('dimension', this.temp.dimension)
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-          createProduct(this.temp).then(() => {
+          createProduct(formData).then((response) => {
+            this.$refs.upload
             this.list.unshift(this.temp)
             this.dialogFormVisible = false
+            var title = ''
+            var message = ''
+            var type = ''
+            switch (response.code) {
+              case 200:
+                title = '成功'; message = response.data; type = 'success'
+                break
+              case 400:
+                title = '危险'; message = response.data; type = 'danger'
+                break
+              default:
+                title = '警告'; message = response.data; type = 'warn'
+                break
+            }
             this.$notify({
-              title: '成功',
-              message: '创建成功',
-              type: 'success',
+              title: title,
+              message: message,
+              type: type,
               duration: 2000
             })
           })
@@ -320,9 +695,12 @@ export default {
     },
     // 处理更新表单
     handleUpdate(row) {
-      this.fileList = row.images
-      this.temp = Object.assign({}, row) // copy obj
-      this.temp.timestamp = new Date(this.temp.timestamp)
+      this.picturePostUrl = '#'
+      getProduct(row).then((response) => {
+        this.temp = Object.assign({}, response.data)
+        console.log(response.data)
+        this.fileList = response.data.images
+      })
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -335,7 +713,8 @@ export default {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
           tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updateProduct(tempData).then(() => {
+          // 更新表单
+          updateProduct(tempData).then((response) => {
             for (const v of this.list) {
               if (v.id === this.temp.id) {
                 const index = this.list.indexOf(v)
@@ -346,10 +725,30 @@ export default {
             this.dialogFormVisible = false
             this.$notify({
               title: '成功',
-              message: '更新成功',
+              message: response.data,
               type: 'success',
               duration: 2000
             })
+            // 更新图片
+            if (response.code === 200) {
+              const formData = new FormData()
+              this.fileList.forEach((file) => {
+                if (typeof file.raw !== 'undefined') {
+                  formData.append('images[]', file.raw)
+                }
+              })
+              if (formData.get('images[]')) {
+                formData.append('id', this.temp.id)
+                saveImageByProductId(formData).then((response) => {
+                  this.$notify({
+                    title: '成功',
+                    message: response.data,
+                    type: 'success',
+                    duration: 2000
+                  })
+                })
+              }
+            }
           })
         }
       })
@@ -361,14 +760,16 @@ export default {
     },
     // 处理删除数据
     handleDelete(row) {
-      this.$notify({
-        title: '成功',
-        message: '删除成功',
-        type: 'success',
-        duration: 2000
+      deleteProduct(row).then((response) => {
+        this.$notify({
+          title: '成功',
+          message: '删除成功',
+          type: 'success',
+          duration: 2000
+        })
+        const index = this.list.indexOf(row)
+        this.list.splice(index, 1)
       })
-      const index = this.list.indexOf(row)
-      this.list.splice(index, 1)
     },
     // 处理高级面板
     handleAdanceToggle() {
@@ -379,15 +780,27 @@ export default {
       this.listQuery.page = 1
       this.listQuery.sku = null
       this.listQuery.name = null
-      this.listQuery.packageWeight = null
-      this.listQuery.range = 'asc'
+      this.listQuery.weight = null
+      this.listQuery.order = 'desc'
       this.listQuery.sort = 'id'
       this.getList()
     },
     handleRemove(file, fileList) {
-      console.log(file, fileList)
+      const params = { id: this.temp.id, imageid: file.id }
+      deleteProductImagebyImageId(params).then((response) => {
+        this.$notify({
+          title: '成功',
+          message: response.data,
+          type: 'success',
+          duration: 2000
+        })
+      })
+    },
+    onChange(file, fileList) {
+      this.fileList = fileList
     },
     handlePictureCardPreview(file) {
+      console.log(file.url)
       this.dialogImageUrl = file.url
       this.dialogVisible = true
     },
@@ -398,7 +811,6 @@ export default {
     handleFileChange(e) {
       const files = e.target.files
       const itemFile = files[0] // only use files[0]
-      // console.log(itemFile)
       this.readerData(itemFile)
     },
     readerData(itemFile) {
@@ -415,7 +827,6 @@ export default {
         console.log({ header, results })
         this.generateDate({ header, results })
       }
-      // reader.readAsArrayBuffer(itemFile)
     },
     fixdata(data) {
       let o = ''
@@ -446,8 +857,8 @@ export default {
       if (this.multipleSelection.length) {
         this.downloadLoading = true
         import('@/vendor/Export2Excel').then(excel => {
-          const tHeader = ['sku', 'name', 'packageWeight', 'packageSize']
-          const filterVal = ['sku', 'name', 'packageWeight', 'packageSize']
+          const tHeader = ['sku', 'name', 'weight', 'dimension']
+          const filterVal = ['sku', 'name', 'weight', 'dimension']
           const list = this.multipleSelection
           const data = this.formatJson(filterVal, list)
           excel.export_json_to_excel(tHeader, data, this.filename)
@@ -456,8 +867,8 @@ export default {
       } else {
         this.downloadLoading = true
         import('@/vendor/Export2Excel').then(excel => {
-          const tHeader = ['sku', 'name', 'packageWeight', 'packageSize']
-          const filterVal = ['sku', 'name', 'packageWeight', 'packageSize']
+          const tHeader = ['sku', 'name', 'weight', 'dimension']
+          const filterVal = ['sku', 'name', 'weight', 'dimension']
           const data = this.formatJson(filterVal, this.list)
           excel.export_json_to_excel(tHeader, data, this.filename)
           this.downloadLoading = false
@@ -476,14 +887,7 @@ export default {
   }
 }
 </script>
-<style lang="scss">
-.right {
-  display: inline-block;
-  padding-right: 20px;
-  position: absolute;
-  right: 0px;
-}
-
+<style lang="scss" scoped>
 #excel-upload-input {
   display: none;
   z-index: -9999;
@@ -492,5 +896,4 @@ export default {
 .el-dialog__body {
   padding: 0px 20px;
 }
-
 </style>

@@ -29,6 +29,39 @@ export function parseTime(time, cFormat) {
   })
   return time_str
 }
+// export function parseOrderStatus(val) {
+//   switch (val) {
+//     case 1:
+//       return '已同步'
+//     case 2:
+//       return '未处理'
+//     case 3:
+//       return '发货中'
+//     case 4:
+//       return '已发货'
+//     case 5:
+//       return '运输中'
+//     case 6:
+//       return '已签收'
+//     case 7:
+//       return '已完成'
+//     default:
+//       break
+//   }
+// }
+
+export function parseOrderExpress(val) {
+  switch (val) {
+    case 1:
+      return '出口易'
+    case 3:
+      return '三态速递'
+    case 4:
+      return '递四方物流'
+    default:
+      break
+  }
+}
 
 export function formatTime(time, option) {
   time = +time * 1000
@@ -78,9 +111,11 @@ export function getByteLen(val) {
   let len = 0
   for (let i = 0; i < val.length; i++) {
     // eslint-disable-next-line
-    if (val[i].match(/[^\x00-\xff]/ig) != null) {
+        if (val[i].match(/[^\x00-\xff]/ig) != null) {
       len += 1
-    } else { len += 0.5 }
+    } else {
+      len += 0.5
+    }
   }
   return Math.floor(len)
 }
@@ -120,7 +155,7 @@ export function html2Text(val) {
 
 export function objectMerge(target, source) {
   /* Merges two  objects,
-     giving the last one precedence */
+                               giving the last one precedence */
 
   if (typeof target !== 'object') {
     target = {}
@@ -167,40 +202,39 @@ export function toggleClass(element, className) {
   element.className = classString
 }
 
-export const pickerOptions = [
-  {
-    text: '今天',
-    onClick(picker) {
-      const end = new Date()
-      const start = new Date(new Date().toDateString())
-      end.setTime(start.getTime())
-      picker.$emit('pick', [start, end])
-    }
-  }, {
-    text: '最近一周',
-    onClick(picker) {
-      const end = new Date(new Date().toDateString())
-      const start = new Date()
-      start.setTime(end.getTime() - 3600 * 1000 * 24 * 7)
-      picker.$emit('pick', [start, end])
-    }
-  }, {
-    text: '最近一个月',
-    onClick(picker) {
-      const end = new Date(new Date().toDateString())
-      const start = new Date()
-      start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
-      picker.$emit('pick', [start, end])
-    }
-  }, {
-    text: '最近三个月',
-    onClick(picker) {
-      const end = new Date(new Date().toDateString())
-      const start = new Date()
-      start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
-      picker.$emit('pick', [start, end])
-    }
-  }]
+export const pickerOptions = [{
+  text: '今天',
+  onClick(picker) {
+    const end = new Date()
+    const start = new Date(new Date().toDateString())
+    end.setTime(start.getTime())
+    picker.$emit('pick', [start, end])
+  }
+}, {
+  text: '最近一周',
+  onClick(picker) {
+    const end = new Date(new Date().toDateString())
+    const start = new Date()
+    start.setTime(end.getTime() - 3600 * 1000 * 24 * 7)
+    picker.$emit('pick', [start, end])
+  }
+}, {
+  text: '最近一个月',
+  onClick(picker) {
+    const end = new Date(new Date().toDateString())
+    const start = new Date()
+    start.setTime(start.getTime() - 3600 * 1000 * 24 * 30)
+    picker.$emit('pick', [start, end])
+  }
+}, {
+  text: '最近三个月',
+  onClick(picker) {
+    const end = new Date(new Date().toDateString())
+    const start = new Date()
+    start.setTime(start.getTime() - 3600 * 1000 * 24 * 90)
+    picker.$emit('pick', [start, end])
+  }
+}]
 
 export function getTime(type) {
   if (type === 'start') {

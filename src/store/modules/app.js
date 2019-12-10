@@ -5,7 +5,17 @@ const app = {
     sidebar: {
       opened: !+Cookies.get('sidebarStatus')
     },
-    language: Cookies.get('language') || 'zh'
+
+    language: Cookies.get('language') || 'zh',
+    dialog: {
+      fullScreen: false
+    },
+    pagation: {
+      layout: 'total, sizes, prev, pager, next, jumper'
+    },
+    table: {
+      height: ''
+    }
   },
   mutations: {
     TOGGLE_SIDEBAR: state => {

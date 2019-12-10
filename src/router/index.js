@@ -19,9 +19,19 @@ import Layout from '../views/layout/Layout'
   }
 **/
 export const constantRouterMap = [
-  { path: '/login', component: _import('login/index'), hidden: true },
-  { path: '/404', component: _import('404'), hidden: true },
-
+  // login
+  {
+    path: '/login',
+    component: _import('login/index'),
+    hidden: true
+  },
+  // 404
+  {
+    path: '/404',
+    component: _import('404'),
+    hidden: true
+  },
+  // dashboard
   {
     path: '',
     component: Layout,
@@ -30,94 +40,123 @@ export const constantRouterMap = [
       path: 'dashboard',
       component: _import('dashboard/index'),
       name: 'dashboard',
-      meta: { title: 'dashboard', icon: 'table', noCache: true }
+      meta: {
+        title: 'dashboard',
+        icon: 'dashboard',
+        noCache: true
+      }
     }]
   },
   {
-    path: '/wms',
-    component: Layout,
-    redirect: '/example/table',
-    name: 'WMS',
-    meta: { title: 'wms', icon: 'example' },
-    children: [
-      {
-        path: 'product',
-        name: 'Product',
-        component: _import('wms/product/index'),
-        meta: { title: 'product', icon: 'table' }
-      },
-      {
-        path: 'supplier',
-        name: 'Supplier',
-        component: _import('wms/supplier/index'),
-        meta: { title: 'supplier', icon: 'tree' }
-      },
-      {
-        path: 'purchase',
-        name: 'Purchase',
-        component: _import('wms/purchase/index'),
-        meta: { title: 'purchase', icon: 'table' }
-      },
-      {
-        path: 'order',
-        name: 'Order',
-        component: _import('wms/order/index'),
-        meta: { title: 'order', icon: 'tree' }
-      }
-    ]
-  },
-  // {
-  //   path: '/example',
-  //   component: Layout,
-  //   redirect: '/example/table',
-  //   name: 'Example',
-  //   meta: { title: 'example', icon: 'example' },
-  //   children: [
-  //     {
-  //       path: 'table',
-  //       name: 'Table',
-  //       component: _import('table/index'),
-  //       meta: { title: 'Table', icon: 'table' }
-  //     },
-  //     {
-  //       path: 'tree',
-  //       name: 'Tree',
-  //       component: _import('tree/index'),
-  //       meta: { title: 'tree', icon: 'tree' }
-  //     }
-  //   ]
-  // },
-  // {
-  //   path: '/form',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       name: 'Form',
-  //       component: _import('form/index'),
-  //       meta: { title: 'form', icon: 'form' }
-  //     }
-  //   ]
-  // },
-  // {
-  //   path: '/complexTable',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       name: 'ComplexTable',
-  //       component: _import('table/complexTable'),
-  //       meta: { title: 'complexTable', icon: 'form' }
-  //     }
-  //   ]
-  // },
-
-  { path: '*', redirect: '/404', hidden: true }
+    path: '*',
+    redirect: '/404',
+    hidden: true
+  }
 ]
 
 export default new Router({
   // mode: 'history', //后端支持可开
-  scrollBehavior: () => ({ y: 0 }),
+  scrollBehavior: () => ({
+    y: 0
+  }),
   routes: constantRouterMap
 })
 
+export const asyncRouterMap = [
+  // wms
+  {
+    path: '/wms',
+    component: Layout,
+    // redirect: '/example/table',
+    name: 'WMS',
+    meta: {
+      title: 'wms',
+      icon: 'wms',
+      role: ['admin']
+    },
+    children: [{
+      path: 'supplier',
+      name: 'Supplier',
+      component: _import('wms/supplier/index'),
+      meta: {
+        title: 'supplier',
+        icon: 'supplier',
+        role: ['admin']
+      }
+    },
+    {
+      path: 'product',
+      name: 'Product',
+      component: _import('wms/product/index'),
+      meta: {
+        title: 'product',
+        icon: 'product',
+        role: ['admin']
+      }
+    },
+    {
+      path: 'purchase',
+      name: 'Purchase',
+      component: _import('wms/purchase/index'),
+      meta: {
+        title: 'purchase',
+        icon: 'purchase',
+        role: ['admin']
+      }
+    },
+    {
+      path: 'order',
+      name: 'Order',
+      component: _import('wms/order/index'),
+      meta: {
+        title: 'order',
+        icon: 'order',
+        role: ['admin']
+      }
+    }
+    ]
+  },
+  // permission
+  {
+    path: '/permission',
+    component: Layout,
+    redirect: '/permission/index',
+    meta: {
+      role: ['admin']
+    },
+    children: [{
+      path: 'index',
+      component: _import('permission/index'),
+      name: 'account',
+      meta: {
+        title: 'account',
+        icon: 'user',
+        role: ['admin']
+      }
+    }]
+  },
+  // settings
+  {
+    path: '/settings',
+    component: Layout,
+    meta: {
+      role: ['admin']
+    },
+    children: [{
+      path: 'index',
+      name: 'settings',
+      component: _import('settings/index'),
+      meta: {
+        title: 'settings',
+        icon: 'settings',
+        role: ['admin']
+      }
+    }]
+  },
+  // *
+  {
+    path: '*',
+    redirect: '/404',
+    hidden: true
+  }
+]

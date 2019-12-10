@@ -2,199 +2,564 @@
   <div class="app-container calendar-list-container">
     <!-- 过滤器 -->
     <div class="filter-container">
-      <el-button class="filter-item" icon="el-icon-edit" @click="handleSync">{{$t('table.add')}}</el-button>
+      <el-button
+        class="filter-item"
+        icon="el-icon-third-iconset0349"
+        @click="handleSync"
+      >{{$t('table.sync')}}</el-button>
       <span class="right">
-        <el-button class="filter-item" icon="el-icon-search" @click="handleAdanceToggle">{{$t('table.advance')}}</el-button>
+        <el-button
+          class="filter-item"
+          icon="el-icon-third-query1"
+          @click="handleAdanceToggle"
+          style="float:right"
+        >{{$t('table.advance')}}</el-button>
       </span>
-      <div class="form-container" v-if="advanceVisable">
+      <div
+        class="form-container"
+        v-if="advanceVisable"
+      >
         <el-row :gutter="24">
-          <el-form label-position="left" label-width="70px">
-            <el-col :span="12">
-              <el-form-item :label="$t('order.date')" prop="date">
+          <el-form
+            label-position="left"
+            label-width="70px"
+          >
+
+          <el-col
+              :span="4"
+              :xs="24"
+              :sm="12"
+              :lg="8"
+            >
+              <el-form-item
+                :label="$t('order.orderId')"
+                prop="orderId"
+              >
+                <el-input
+                  v-model="listQuery.orderId"
+                  prefix-icon="el-icon-third-dingdan"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col
+              :span="4"
+              :xs="24"
+              :sm="12"
+              :lg="8"
+            >
+              <el-form-item
+                :label="$t('order.transId')"
+                prop="transId"
+              >
+                <el-input
+                  v-model="listQuery.transId"
+                  prefix-icon="el-icon-third-jiaoyisuo"
+                ></el-input>
+              </el-form-item>
+            </el-col>
+           
+            <el-col
+              :span="4"
+              :xs="24"
+              :sm="12"
+              :lg="8"
+            >
+              <el-form-item
+                :label="$t('order.status')"
+                prop="status"
+                style="float:right"
+              >
+                <el-select
+                  v-model="listQuery.status"
+                  placeholder="请选择"
+                >
+                  <el-option
+                    v-for="item in statusOptions"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+          </el-form>
+        </el-row>
+        <el-row :gutter="24">
+          <el-form
+            label-position="left"
+            label-width="70px"
+          >
+             <el-col
+              :span="4"
+              :xs="24"
+              :sm="12"
+              :lg="12"
+            >
+              <el-form-item
+                :label="$t('order.date')"
+                prop="date"
+              >
                 <!-- <el-input v-model="listQuery.date" prefix-icon="el-icon-edit"></el-input> -->
-                <el-date-picker v-model="listQuery.date" type="daterange" format="yyyy 年 MM 月 dd 日" align="right" unlink-panels range-separator="至 " start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions2"></el-date-picker>
+                <el-date-picker
+                  v-model="listQuery.date"
+                  type="daterange"
+                  format="yyyy 年 MM 月 dd 日"
+                  align="right"
+                  unlink-panels
+                  range-separator="至 "
+                  start-placeholder="开始日期"
+                  end-placeholder="结束日期"
+                  :picker-options="pickerOptions2"
+                ></el-date-picker>
               </el-form-item>
             </el-col>
-            <el-col :span="6">
-              <el-form-item :label="$t('order.orderId')" prop="orderId">
-                <el-input v-model="listQuery.orderId" prefix-icon="el-icon-tickets"></el-input>
-              </el-form-item>
-            </el-col>
+            <el-col
+              :span="4"
+              :xs="24"
+              :sm="12"
+              :lg="12"
+            >
+              <el-form-item style="margin-bottom:50px">
+                <span style="float:right">
+                  <el-button-group class="filter-containter-button-group">
+                    <el-button
+                      plain
+                      icon="el-icon-search"
+                      @click="handleFilter"
+                    >{{$t('table.search')}}</el-button>
+                    <el-button
+                      plain
+                      icon="el-icon-refresh"
+                      @click="handleAdvanceReset"
+                    >{{$t('table.reset')}}</el-button> 
+                  </el-button-group>
 
-            <el-col :span="6">
-              <el-form-item>
-                <el-radio-group v-model="listQuery.range">
-                  <el-radio label="desc">倒序</el-radio>
-                  <el-radio label="asc">顺序</el-radio>
-                </el-radio-group>
+                </span>
               </el-form-item>
             </el-col>
           </el-form>
         </el-row>
         <el-row :gutter="24">
-          <el-form label-position="left" label-width="70px">
-            <el-col :span="6">
-              <el-form-item :label="$t('order.transId')" prop="transId">
-                <el-input v-model="listQuery.transId" prefix-icon="el-icon-remove-outline"></el-input>
-              </el-form-item>
+          <el-form
+            label-position="left"
+            label-width="70px"
+          >
+            <el-col
+              :span="6"
+              :xs="24"
+              :sm="12"
+              :lg="12"
+            >
+              <el-form-item :label="$t('table.exportFileName')">
+                  <el-input
+                    :placeholder="$t('excel.placeholder')"
+                    prefix-icon="el-icon-document"
+                    v-model="filename"
+                  ></el-input>
+                </el-form-item>
             </el-col>
-            <el-col :span="6">
-              <el-form-item :label="$t('order.express')" prop="express">
-                <el-select v-model="listQuery.express" placeholder="请选择">
-                  <el-option v-for="item in expressOptions" :key="item.value" :label="item.label" :value="item.value">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item :label="$t('order.status')" prop="status">
-                <el-select v-model="listQuery.status" placeholder="请选择">
-                  <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
+            <el-col
+              :span="6"
+              :xs="24"
+              :sm="12"
+              :lg="12"
+            >
+              <!-- <el-form-item  style="float:right">
+                <input
+                  id="excel-upload-input"
+                  type="file"
+                  accept=".xlsx, .xls"
+                  class="c-hide"
+                  @change="handleFileChange"
+                ><span style="float:right">
+                  <el-button-group class="filter-containter-button-group">
+                    <el-button
+                      
+                      icon="el-icon-upload2"
+                      @click="handleUpload"
+                    >{{$t('table.import')}}</el-button>
+                    <el-button
+                     
+                      icon="el-icon-download"
+                      @click="handleDownload"
+                      :loading="downloadLoading"
+                      v-waves
+                    >{{$t('table.export')}}</el-button>
+                  </el-button-group>
+                </span>
+              </el-form-item> -->
+              <el-form-item style="margin-bottom:50px">
+                <input
+                  id="excel-upload-input"
+                  type="file"
+                  accept=".xlsx, .xls"
+                  class="c-hide"
+                  @change="handleFileChange"
+                >
+                <span style="float:right">
+                  <el-button-group class="filter-containter-button-group">
+                    <el-button
+                      
+                      icon="el-icon-upload2"
+                      @click="handleUpload"
+                    >{{$t('table.import')}}</el-button>
+                    <el-button
+                     
+                      icon="el-icon-download"
+                      @click="handleDownload"
+                      :loading="downloadLoading"
+                      v-waves
+                    >{{$t('table.export')}}</el-button> 
+                  </el-button-group>
 
-            <el-col :span="6">
-
+                </span>
+              </el-form-item>
             </el-col>
           </el-form>
-          <el-col :span="6">
-            <span style="display: inline-block;padding-right: 10px;position:absolute;right:0px;">
-              <el-button type="primary" icon="el-icon-search" @click="handleFilter">{{$t('table.search')}}</el-button>
-              <el-button type="danger" icon="el-icon-refresh" @click="handleAdvanceReset">{{$t('table.reset')}}</el-button>
-            </span>
-          </el-col>
-        </el-row>
-        <el-row :gutter="24">
-          <el-form label-position="left" label-width="70px">
-            <el-col :span="12">
-              <el-form-item :label="$t('table.exportFileName')" prop="packageWeight">
-                <el-input style='width:340px;' :placeholder="$t('excel.placeholder')" prefix-icon="el-icon-document" v-model="filename"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="6">
-              <el-form-item :label="$t('table.sortFiled')" prop="packageWeight">
-                <el-select style="width: 140px" class="filter-item" v-model="listQuery.sort">
-                  <el-option key="date" :label="$t('order.date')" value="date"></el-option>
-                  <el-option key="orderId" :label="$t('order.orderId')" value="orderId"></el-option>
-                  <el-option key="transId" :label="$t('order.transId')" value="transId"></el-option>
-                  <el-option key="express" :label="$t('order.express')" value="express"></el-option>
-                  <el-option key="status" :label="$t('order.status')" value="status"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-          </el-form>
-          <el-col :span="6">
-            <span style="display: inline-block;padding-right: 10px;position:absolute;right:0px;">
-              <input id="excel-upload-input" type="file" accept=".xlsx, .xls" class="c-hide" @change="handkeFileChange">
-              <el-button class="filter-item" icon="el-icon-upload2" @click="handleUpload">导入</el-button>
-              <el-button class="filter-item" icon="el-icon-download" @click="handleDownload" :loading="downloadLoading" v-waves>{{$t('table.export')}}</el-button>
-            </span>
-          </el-col>
+
         </el-row>
       </div>
     </div>
     <!-- 表格 -->
-    <el-table :key='tableKey' :data="list" v-loading="listLoading" :element-loading-text="$t('table.loadingText')" border fit highlight-current-row @selection-change="handleSelectionChange" style="width: 100%">
-      <el-table-column type="selection" align="center"></el-table-column>
-      <el-table-column width="160px" align="center" :label="$t('order.date')">
+    <el-table
+      :key='tableKey'
+      :data="list"
+      v-loading="listLoading"
+      :element-loading-text="$t('table.loadingText')"
+      border
+      fit
+      highlight-current-row
+      :default-sort="{prop: 'id', order: 'descending'}"
+      @sort-change="handleSort"
+      @selection-change="handleSelectionChange"
+      class="data-table"
+    >
+      <el-table-column
+        type="selection"
+        align="center"
+      ></el-table-column>
+      <el-table-column
+        width="160px"
+        align="center"
+        sortable="custom"
+        prop="date"
+        :label="$t('order.date')"
+        :render-header="renderHeader"
+      >
         <template slot-scope="scope">
           <span>{{scope.row.date | parseTime('{y}-{m}-{d}')}}</span>
+          <!-- <span>{{scope.row.date}}</span> -->
         </template>
       </el-table-column>
-      <el-table-column min-width="265px" align="center" :label="$t('order.orderId')">
+      <el-table-column
+        min-width="265px"
+        align="center"
+        :label="$t('order.orderId')"
+        sortable="custom"
+        prop="orderId"
+        :render-header="renderHeader"
+      >
         <template slot-scope="scope">
-          <span class="link-type" @click="handleUpdate(scope.row)">{{scope.row.orderId}}</span>
+          <span
+            class="link-type"
+            @click="handleUpdate(scope.row)"
+          >{{scope.row.orderId}}</span>
         </template>
       </el-table-column>
-      <el-table-column min-width="265px" align="center" :label="$t('order.transId')">
+      <el-table-column
+        min-width="265px"
+        align="center"
+        :label="$t('order.transId')"
+        sortable="custom"
+        prop="transId"
+        :render-header="renderHeader"
+      >
         <template slot-scope="scope">
-          <span class="link-type" @click="handleUpdate(scope.row)">{{scope.row.transId}}</span>
+          <span
+            class="link-type"
+            @click="handleUpdate(scope.row)"
+          >{{scope.row.transId}}</span>
         </template>
       </el-table-column>
 
-      <el-table-column width="130px" align="center" :label="$t('order.express')">
+      <el-table-column
+        width="130px"
+        align="center"
+        :label="$t('order.express')"
+        sortable="custom"
+        prop="express"
+        :render-header="renderHeader"
+      >
         <template slot-scope="scope">
           <span>{{scope.row.express}}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="$t('order.status')" width="95">
+      <el-table-column
+        align="center"
+        :label="$t('order.status')"
+        sortable="custom"
+        prop="status"
+        width="95"
+        :render-header="renderHeader"
+      >
         <template slot-scope="scope">
-          <span>{{scope.row.status}}</span>
+          <el-tag
+            :type="parseOrderStatusTag(scope.row.status)"
+            disable-transitions
+            sortable="custom"
+            prop="status"
+          >{{scope.row.status | parseOrderStatus()}}</el-tag>
+          <!-- <span>{{scope.row.status | parseOrderStatus()}}</span> -->
         </template>
       </el-table-column>
-      <el-table-column align="center" :label="$t('table.actions')" width="150" class-name="small-padding fixed-width">
+      <el-table-column
+        align="center"
+        :label="$t('table.actions')"
+        width="150"
+        prop="action"
+        class-name="small-padding fixed-width"
+        :render-header="renderHeader"
+      >
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">{{$t('table.edit')}}</el-button>
-          <el-button size="mini" type="danger" @click="handleDelete(scope.row)">{{$t('table.delete')}}
-          </el-button>
+          <el-button
+            type="primary"
+            size="mini"
+            @click="handleUpdate(scope.row)"
+          >{{$t('table.edit')}}</el-button>
+          <!-- <el-button size="mini" type="danger" @click="handleDelete(scope.row)">{{$t('table.delete')}}
+          </el-button> -->
         </template>
       </el-table-column>
     </el-table>
     <!-- 分页导航 -->
     <div class="pagination-container">
-      <el-pagination background @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="listQuery.page" :page-sizes="[10,20,30, 50]" :page-size="listQuery.limit" layout="total, sizes, prev, pager, next, jumper" :total="total">
+      <el-pagination
+        background
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page.sync="listQuery.page"
+        :page-sizes="[10,20,30, 50]"
+        :page-size="listQuery.limit"
+        :layout="this.$store.state.app.pagation.layout"
+        :total="total"
+      >
       </el-pagination>
     </div>
     <!-- 同步订单对话框 -->
-    <el-dialog :title="$t('order.sync')" :visible.sync="syncFormVisible" :before-close="cancelSyncData">
+    <el-dialog
+      :title="$t('order.sync')"
+      :visible.sync="syncFormVisible"
+      :before-close="cancelSyncData"
+      center
+      :fullscreen="this.$store.state.app.dialog.fullScreen"
+    >
       <template>
         <div v-show="syncProcessVisable">
-          <el-progress :percentage="70"></el-progress>
+          <el-progress
+            :percentage="processing"
+            :text-inside="true"
+            :stroke-width="18"
+            color="rgba(142, 113, 199, 0.7)"
+          ></el-progress>
+
         </div>
-        <el-form :rules="rules" ref="dataForm" :model="temp" label-position="left" label-width="80px" style='width: 400px; margin-left:50px;'>
-          <el-form-item :label="$t('order.dateRange')" prop="dateRange">
-            <el-date-picker v-model="temp.dateRange" type="daterange" align="right" unlink-panels range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" :picker-options="pickerOptions2">
+
+        <el-form
+          :rules="rules"
+          ref="syncDataForm"
+          :model="sync"
+          label-position="left"
+          label-width="80px"
+          style='width: 400px; margin-left:50px;'
+        >
+
+          <el-form-item
+            :label="$t('order.dateRange')"
+            prop="dateRange"
+          >
+            <el-date-picker
+              v-model="sync.dateRange"
+              type="daterange"
+              format="yyyy 年 MM 月 dd 日"
+              value-format="yyyy-MM-dd"
+              align="right"
+              unlink-panels
+              range-separator="至"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              :picker-options="pickerOptions2"
+            >
             </el-date-picker>
           </el-form-item>
-          <el-form-item :label="$t('order.platform')" prop="platform">
-            <el-select v-model="temp.platform" placeholder="请选择">
-              <el-option v-for="item in platformOptions" :key="item.value" :label="item.label" :value="item.value">
+          <el-form-item
+            :label="$t('order.platform')"
+            prop="platform"
+          >
+            <el-select
+              v-model="sync.platform"
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="item in platformOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item :label="$t('order.account')" prop="account">
-            <el-select v-model="temp.account" placeholder="请选择">
-              <el-option v-for="item in accountOptions" :key="item.value" :label="item.label" :value="item.value">
+          <el-form-item
+            :label="$t('order.account')"
+            prop="account"
+          >
+            <el-select
+              v-model="sync.account"
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="item in accountOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
               </el-option>
             </el-select>
           </el-form-item>
         </el-form>
       </template>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="cancelSyncData" icon="el-icon-close">{{$t('table.cancel')}}</el-button>
-        <el-button type="primary" @click="syncData" icon="el-icon-check">{{$t('order.sync')}}</el-button>
+      <div
+        slot="footer"
+        class="dialog-footer"
+      >
+        <el-button
+          @click="cancelSyncData"
+          icon="el-icon-close"
+        >{{$t('table.cancel')}}</el-button>
+        <el-button
+          type="primary"
+          @click="syncData"
+          icon="el-icon-check"
+        >{{$t('order.sync')}}</el-button>
       </div>
     </el-dialog>
 
     <!-- 编辑菜单对话框 -->
-    <el-dialog title="编辑菜单" :visible.sync="editFormVisible">
+    <el-dialog
+      title="编辑菜单"
+      :visible.sync="editFormVisible"
+    >
       <template>
-        <el-form label-position="left" label-width="80px" :model="order" style='width: 400px; margin-left:50px;'>
-          <el-form-item :label="$t('order.date')" prop="dateRange">
-            <el-date-picker v-model="order.date" type="date" placeholder="选择日期">
+        <el-form
+          label-position="left"
+          ref="editDataForm"
+          label-width="80px"
+          :model="order"
+          style='width: 400px; margin-left:50px;'
+        >
+          <el-form-item
+            :label="$t('order.date')"
+            prop="dateRange"
+          >
+            <el-date-picker
+              v-model="order.date"
+              type="date"
+              placeholder="选择日期"
+              :disabled="true"
+            >
             </el-date-picker>
           </el-form-item>
-          <el-form-item :label="$t('order.orderId')" prop="orderId">
-            <el-input v-model="order.orderId"></el-input>
+          <el-form-item
+            :label="$t('order.orderId')"
+            prop="orderId"
+          >
+            <el-input
+              v-model="order.orderId"
+              :disabled="true"
+            ></el-input>
           </el-form-item>
-          <el-form-item :label="$t('order.express')" prop="express">
-            <el-select v-model="order.express" placeholder="请选择">
-              <el-option v-for="item in expressOptions" :key="item.value" :label="item.label" :value="item.value">
+          <!-- <el-form-item
+            :label="$t('order.agent')"
+            prop="agent"
+          >
+            <el-select
+              v-model="order.agent"
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="item in agentOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
               </el-option>
             </el-select>
+          </el-form-item> -->
+          <el-form-item
+            :label="$t('order.express')"
+            prop="express"
+          >
+            <!-- <el-select
+              v-model="order.express"
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="item in expressOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select> -->
+
+            <el-cascader
+              v-model="order.ExpressService"
+              placeholder="试试搜索：DHL"
+              :options="expressOptions2"
+              filterable
+            ></el-cascader>
           </el-form-item>
-          <el-form-item :label="$t('order.status')" prop="status">
-            <el-select v-model="order.status" placeholder="请选择">
-              <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value">
+          <el-form-item
+            :label="$t('order.postage')"
+            prop="postage"
+          >
+            <el-input v-model="order.postage"></el-input>
+            <!-- <el-select v-model="order.postage" placeholder="请选择">
+              <el-option v-for="item in expressOptions" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select> -->
+          </el-form-item>
+          <el-form-item
+            :label="$t('order.status')"
+            prop="status"
+          >
+            <el-select
+              v-model="order.status"
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="item in statusOptions"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
               </el-option>
             </el-select>
           </el-form-item>
         </el-form>
-        <div slot="footer" class="dialog-footer">
-          <el-button @click="cancelEditData" icon="el-icon-close">{{$t('table.cancel')}}</el-button>
-          <el-button type="primary" @click="syncData" icon="el-icon-check">{{$t('order.sync')}}</el-button>
+        <div
+          slot="footer"
+          class="dialog-footer"
+        >
+          <el-button
+            @click="cancelEditData"
+            icon="el-icon-close"
+          >{{$t('table.cancel')}}</el-button>
+          <el-button
+            type="primary"
+            @click="updateData"
+            icon="el-icon-check"
+          >{{$t('order.sync')}}</el-button>
         </div>
       </template>
     </el-dialog>
@@ -202,7 +567,7 @@
 </template>
 
 <script>
-import { fetchList } from '@/api/order'
+import { fetchList, fetchPrecentage, updateOrder, fetchExpress } from '@/api/order'
 import waves from '@/directive/waves' // 水波纹指令
 import { parseTime } from '@/utils'
 import XLSX from 'xlsx'
@@ -274,13 +639,13 @@ export default {
       listQuery: {
         page: 1,
         limit: 20,
-        sort: '',
         date: '',
         transId: '',
         orderId: '',
-        status: '',
-        express: '',
-        range: 'asc'
+        status: null,
+        express: null,
+        sort: 'orderId',
+        order: 'desc'
       },
       temp: {
         id: undefined,
@@ -288,15 +653,25 @@ export default {
         account: '',
         platform: ''
       },
+      sync: {
+        dateRange: '',
+        account: '',
+        platform: ''
+      },
       order: {
+        id: '',
         date: '',
         transId: '',
-        express: '',
-        status: ''
+        // agent: '',
+        // express: '',
+        ExpressService: [],
+        postage: null,
+        status: null
       },
       syncFormVisible: false,
       syncProcessVisable: false,
       editFormVisible: false,
+      processing: 0,
       dialogStatus: '',
       textMap: {
         update: 'Edit',
@@ -313,6 +688,9 @@ export default {
         status: [{ required: true, validator: checkStatus, trigger: 'blur' }]
       },
       pickerOptions2: {
+        disabledDate(time) {
+          return time.getTime() > Date.now()
+        },
         shortcuts: [{
           text: '最近一周',
           onClick(picker) {
@@ -358,26 +736,49 @@ export default {
         value: '3',
         label: '其他'
       }],
-      expressOptions: [{
-        value: '出口易',
+      agentOptions: [{
+        value: 1,
         label: '出口易'
       }, {
-        value: '三态速递',
+        value: 3,
         label: '三态速递'
       }, {
-        value: '递四方',
-        label: '递四方'
+        value: 4,
+        label: '递四方物流'
+      }],
+      expressOptions: [{
+        value: 'RM1R',
+        label: 'RM1R'
+      }, {
+        value: 'UPS',
+        label: 'UPS'
+      }, {
+        value: 'DHL',
+        label: 'DHL'
       }],
       statusOptions: [{
-        value: '已发货',
-        label: '已发货'
+        value: 1,
+        label: '已同步'
       }, {
-        value: '未处理',
+        value: 2,
         label: '未处理'
       }, {
-        value: '发货中',
+        value: 3,
         label: '发货中'
+      }, {
+        value: 4,
+        label: '已发货'
+      }, {
+        value: 5,
+        label: '运输中'
+      }, {
+        value: 6,
+        label: '已签收'
+      }, {
+        value: 7,
+        label: '已完成'
       }],
+      expressOptions2: [],
       downloadLoading: false,
       multipleSelection: [],
       filename: ''
@@ -391,10 +792,91 @@ export default {
     getList() {
       this.listLoading = true
       fetchList(this.listQuery).then(response => {
+        if (response.code === 200) {
+          fetchExpress({}).then((response) => {
+            if (response.code === 200) {
+              const options = []
+              response.data.items.forEach(agent => {
+                const children = []
+                agent.service.forEach(express => {
+                  children.push({ value: express, label: express })
+                  // console.log(children)
+                })
+                options.push({ value: agent.agent, label: this.parseOrderAgent(agent.agent), children: children })
+              })
+              this.expressOptions2 = options
+            }
+          })
+        }
         this.list = response.data.items
         this.total = response.data.total
         this.listLoading = false
       })
+    },
+    renderHeader(h, { column }) { // h即为cerateElement的简写，具体可看vue官方文档
+      // console.log(column)
+      let icon = ''
+      switch (column.property) {
+        case 'date':
+          icon = 'el-icon-date'
+          break
+        case 'orderId':
+          icon = 'el-icon-third-dingdan'
+          break
+        case 'transId':
+          icon = 'el-icon-third-jiaoyisuo'
+          break
+        case 'express':
+          icon = 'el-icon-third-order_receive'
+          break
+        case 'status':
+          icon = 'el-icon-third-ecs-running'
+          break
+        case 'action':
+          icon = 'el-icon-third-caozuogongneng'
+          break
+        default:
+          break
+      }
+      return h(
+        'span',
+        [
+
+          h('i', {
+            class: icon,
+            style: 'padding-right:5px'
+          }),
+          h('span', column.label)
+        ],
+      )
+    },
+    parseOrderStatusTag(val) {
+      switch (val) {
+        case 1:
+          return 'info'
+        case 2:
+          return 'danger'
+        case 3:
+          return 'warning'
+        case 4:
+          return ''
+        case 7:
+          return 'success'
+        default:
+          return 'success'
+      }
+    },
+    parseOrderAgent(val) {
+      switch (val) {
+        case 1:
+          return '出口易'
+        case 3:
+          return '三态速递'
+        case 4:
+          return '递四方物流'
+        default:
+          break
+      }
     },
     // 数据过滤
     handleFilter() {
@@ -411,6 +893,24 @@ export default {
       this.listQuery.page = val
       this.getList()
     },
+    // 远程排序
+    handleSort(val) {
+      this.listQuery.page = 1
+      this.listQuery.sort = val.prop
+      switch (val.order) {
+        case 'ascending':
+          val.order = 'asc'
+          break
+        case 'descending':
+          val.order = 'desc'
+          break
+        default:
+          val.order = null
+          break
+      }
+      this.listQuery.order = val.order
+      this.getList()
+    },
     // 重置临时数据
     resetTemp() {
       this.temp = {
@@ -423,13 +923,77 @@ export default {
         packageSize: ''
       }
     },
+    resetOrder() {
+      this.order = {
+        id: '',
+        date: '',
+        transId: '',
+        // agent: '',
+        ExpressService: [],
+        postage: null,
+        status: null
+      }
+    },
     handleSync() {
       this.resetTemp()
       this.dialogStatus = 'create'
       this.syncFormVisible = true
       this.$nextTick(() => {
-        this.$refs['dataForm'].clearValidate()
+        this.$refs['syncDataForm'].clearValidate()
       })
+    },
+    syncData() {
+      console.log('同步中。。。')
+      this.syncProcessVisable = true
+      var _this = this
+      fetchPrecentage(_this.sync).then((response) => {
+        if (response.code === 200) {
+          // var i = 5000
+          // _this.processing = response.data
+          var Interval = () => {
+            var i = 1000
+            if (_this.processing < 100) {
+              fetchPrecentage(_this.sync).then((res) => {
+                i = i + 1000
+                _this.processing = res.data
+                console.log(i)
+              }).catch(console.log('出错' + i))
+            } else if (_this.processing === 100) {
+              _this.getList()
+              console.log('完成同步')
+              _this.cancelSyncData()
+              clearInterval(_this.time)
+            }
+            return i
+          }
+          _this.time = setInterval(Interval, 5000)
+        }
+      }).catch((error) => { console.log(error) })
+
+      // _this.time = setInterval(function() {
+      //   if (_this.processing < 100) {
+      //     console.log(10)
+      //     fetchPrecentage().then(response => {
+      //       if (response.code === 200) {
+      //         console.log(response.data)
+      //         _this.processing = response.data
+      //       }
+      //     })
+      //   } else if (_this.processing === 100) {
+      //     _this.getList()
+      //     console.log('完成同步')
+      //     _this.cancelSyncData()
+      //     clearInterval(_this.time)
+      //   }
+      // }, 5000)
+    },
+
+    cancelSyncData() {
+      clearInterval(this.time)
+      this.syncFormVisible = false
+      this.syncProcessVisable = false
+      this.processing = 0
+      this.fileList = []
     },
     // handleEdit() {
     //   this.editFormVisible = true
@@ -443,29 +1007,14 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
     },
-    syncData() {
-      console.log('同步中。。。')
-      this.syncProcessVisable = true
-      // this.$refs['dataForm'].validate((valid) => {
-      //   if (valid) {
-      //     this.temp.id = parseInt(Math.random() * 100) + 1024 // mock a id
-      //     // createProduct(this.temp).then(() => {
-      //     //   this.list.unshift(this.temp)
-      //     //   this.syncFormVisible = false
-      //     //   this.$notify({
-      //     //     title: '成功',
-      //     //     message: '创建成功',
-      //     //     type: 'success',
-      //     //     duration: 2000
-      //     //   })
-      //     // })
-      //   }
-      // })
-    },
+
     // 处理更新表单
     handleUpdate(row) {
       this.editFormVisible = true
       this.order = Object.assign({}, row)
+      this.order.ExpressService = [row.agent, row.express]
+      this.order.date = parseTime(row.date)
+      console.log(row.agent)
       // this.fileList = row.images
       // this.temp = Object.assign({}, row) // copy obj
       // this.temp.timestamp = new Date(this.temp.timestamp)
@@ -477,10 +1026,34 @@ export default {
     },
     // 更新数据
     updateData() {
-      this.$refs['dataForm'].validate((valid) => {
+      this.$refs['editDataForm'].validate((valid) => {
         if (valid) {
-          const tempData = Object.assign({}, this.temp)
-          tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
+          console.log(this.order.ExpressService[0])
+          // const tempData = Object.assign({}, this.temp)
+          const tempData = {
+            id: this.order.id,
+            agent: this.order.ExpressService[0],
+            postage: this.order.postage,
+            express: this.order.ExpressService[1],
+            // express: this.order.express,
+            status: this.order.status
+          }
+
+          // tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
+          // console.log(tempData)
+          updateOrder(tempData).then((response) => {
+            if (response.code === 200) {
+              this.editFormVisible = false
+              this.resetOrder()
+              this.$notify({
+                title: '成功',
+                message: '更新成功',
+                type: 'success',
+                duration: 2000
+              })
+              this.getList()
+            }
+          })
           // updateProduct(tempData).then(() => {
           //   for (const v of this.list) {
           //     if (v.id === this.temp.id) {
@@ -499,11 +1072,6 @@ export default {
           // })
         }
       })
-    },
-    cancelSyncData() {
-      this.syncFormVisible = false
-      this.syncProcessVisable = false
-      this.fileList = []
     },
     cancelEditData() {
       this.editFormVisible = false
@@ -525,11 +1093,12 @@ export default {
     },
     handleAdvanceReset() {
       this.listQuery.page = 1
-      this.listQuery.sku = null
-      this.listQuery.name = null
-      this.listQuery.packageWeight = null
-      this.listQuery.range = 'asc'
-      this.listQuery.sort = 'id'
+      this.listQuery.orderId = null
+      this.listQuery.transId = null
+      this.listQuery.express = null
+      this.listQuery.status = null
+      this.listQuery.order = 'desc'
+      this.listQuery.sort = 'orderId'
       this.getList()
     },
     handleRemove(file, fileList) {
@@ -543,7 +1112,7 @@ export default {
     handleUpload() {
       document.getElementById('excel-upload-input').click()
     },
-    handkeFileChange(e) {
+    handleFileChange(e) {
       const files = e.target.files
       const itemFile = files[0] // only use files[0]
       // console.log(itemFile)

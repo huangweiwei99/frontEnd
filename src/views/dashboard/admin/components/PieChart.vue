@@ -56,7 +56,7 @@ export default {
         legend: {
           left: 'center',
           bottom: '10',
-          data: ['Industries', 'Technology', 'Forex', 'Gold', 'Forecasts']
+          data: ['A00001', 'A00002', 'A00003', 'A00004', 'A00005']
         },
         calculable: true,
         series: [
@@ -67,11 +67,11 @@ export default {
             radius: [15, 95],
             center: ['50%', '38%'],
             data: [
-              { value: 320, name: 'Industries' },
-              { value: 240, name: 'Technology' },
-              { value: 149, name: 'Forex' },
-              { value: 100, name: 'Gold' },
-              { value: 59, name: 'Forecasts' }
+              { value: 320, name: 'A00001' },
+              { value: 240, name: 'A00002' },
+              { value: 149, name: 'A00003' },
+              { value: 100, name: 'A00004' },
+              { value: 59, name: 'A00005' }
             ],
             animationEasing: 'cubicInOut',
             animationDuration: 2600
@@ -82,3 +82,4 @@ export default {
   }
 }
 </script>
+  

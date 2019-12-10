@@ -1,9 +1,11 @@
 import Vue from 'vue'
 
-import 'normalize.css/normalize.css'// A modern alternative to CSS resets
+import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+// import './assets/icon/iconfont.css'
+import './assets/third-party/el-icon-third/iconfont.css'
 import i18n from './lang'
 
 import '@/styles/index.scss' // global css

@@ -49,7 +49,9 @@ export default {
     product: '产品管理',
     supplier: '供应商管理',
     purchase: '采购管理',
-    order: '订单管理'
+    order: '订单管理',
+    account: '账户中心',
+    settings: '系统设置'
   },
   navbar: {
     logOut: '退出登录',
@@ -98,6 +100,7 @@ export default {
     advance: '高级',
     add: '添加',
     export: '导出',
+    import: '导入',
     reviewer: '审核人',
     id: '序号',
     date: '时间',
@@ -118,6 +121,7 @@ export default {
     sortFiled: '排序域',
     exportFileName: '文件名',
     return: '返回',
+    sync: '同步',
     save: '保存'
   },
   errorLog: {
@@ -147,11 +151,13 @@ export default {
   product: {
     name: '产品名称',
     sku: 'SKU',
-    weight: '净重量',
-    size: '净尺寸',
-    packageWeight: '包装重量',
-    packageSize: '包装尺寸',
-    remark: '备注'
+    // weight: '净重量',
+    // size: '净尺寸',
+    weight: '包装重量',
+    dimension: '包装尺寸',
+    remark: '备注',
+    info: '产品信息',
+    images: '产品图片'
   },
   supplier: {
     name: '供应商',
@@ -164,18 +170,39 @@ export default {
     optsupplier: '请选择供应商',
     place: '采购地点',
     quantity: '采购数量',
-    price: '价格'
+    cost: '价格'
   },
   order: {
     date: '交易日期',
     transId: '交易号',
+    agent: '快递代理',
     express: '快递',
+    postage: '邮费',
     status: '状态',
     account: '账号',
     dateRange: '日期范围',
     platform: '平台',
     sync: '同步',
     orderId: '订单号'
+  },
+  settings: {
+    name: '系统名称',
+    description: '页面描述',
+    allowOrgin: '跨域允许',
+    addUrlTag: '添加URL'
+  },
+  statistic: {
+    orderQuantity: '订单总数',
+    orderAmount: '订单总额',
+    productQuantity: '产品总数',
+    purchaseAmount: '采购总额'
+  },
+  user: {
+    name: '用户名',
+    email: '电子邮件',
+    status: '状态',
+    phone: '手机',
+    password: '密码'
   },
   rule: {
     productName: '产品名称不能空',
@@ -184,6 +211,7 @@ export default {
   form: {
     create: '创建',
     edit: '编辑'
-  }
+  },
+  Create: '创建',
+  Edit: '编辑'
 }
-

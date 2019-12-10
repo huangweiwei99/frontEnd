@@ -1,29 +1,47 @@
 <template>
   <div class="dashboard-editor-container">
-<panel-group @handleSetLineChartData="handleSetLineChartData"></panel-group>
+    <panel-group
+      @handleSetLineChartData="handleSetLineChartData"
+      :orderQuantity="orderQuantity"
+      :orderAmount="orderAmount"
+      :purchaseAmount="purchaseAmount"
+      :productQuantity="productQuantity"
+    ></panel-group>
 
-<el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
+    <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
       <line-chart :chart-data="lineChartData"></line-chart>
     </el-row>
 
     <el-row :gutter="32">
-      <el-col :xs="24" :sm="24" :lg="8">
+      <el-col
+        :xs="24"
+        :sm="24"
+        :lg="8"
+      >
         <div class="chart-wrapper">
           <raddar-chart></raddar-chart>
         </div>
       </el-col>
-      <el-col :xs="24" :sm="24" :lg="8">
+      <el-col
+        :xs="24"
+        :sm="24"
+        :lg="8"
+      >
         <div class="chart-wrapper">
           <pie-chart></pie-chart>
         </div>
       </el-col>
-      <el-col :xs="24" :sm="24" :lg="8">
+      <el-col
+        :xs="24"
+        :sm="24"
+        :lg="8"
+      >
         <div class="chart-wrapper">
           <bar-chart></bar-chart>
         </div>
       </el-col>
     </el-row>
-</div>
+  </div>
 </template>
 
 <script>
@@ -32,6 +50,8 @@ import LineChart from './components/LineChart'
 import RaddarChart from './components/RaddarChart'
 import PieChart from './components/PieChart'
 import BarChart from './components/BarChart'
+
+import { fetchStatistic } from '@/api/statistic'
 
 const lineChartData = {
   newVisitis: {
@@ -51,7 +71,6 @@ const lineChartData = {
     actualData: [120, 82, 91, 154, 162, 140, 130]
   }
 }
-
 export default {
   name: 'dashboard-admin',
   components: {
@@ -63,12 +82,29 @@ export default {
   },
   data() {
     return {
-      lineChartData: lineChartData.newVisitis
+      lineChartData: lineChartData.newVisitis,
+      orderQuantity: 5000,
+      orderAmount: 9999,
+      productQuantity: 10000,
+      purchaseAmount: 900
     }
+  },
+  created() {
+    fetchStatistic().then((response) => {
+      if (response.code === 200) {
+        this.orderQuantity = response.data.panel_group.ordersQuantity
+        this.orderAmount = response.data.panel_group.ordersAmount
+        this.productQuantity = response.data.panel_group.productsQuantity
+        this.purchaseAmount = response.data.panel_group.purchaseAmount
+      }
+    })
   },
   methods: {
     handleSetLineChartData(type) {
       this.lineChartData = lineChartData[type]
+    },
+    getStatistic() {
+
     }
   }
 }

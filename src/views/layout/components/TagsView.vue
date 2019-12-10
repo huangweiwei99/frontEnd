@@ -1,12 +1,30 @@
 <template>
   <div class="tags-view-container">
-    <scroll-pane class='tags-view-wrapper' ref='scrollPane'>
-      <router-link ref='tag' class="tags-view-item" :class="isActive(tag)?'active':''" v-for="tag in Array.from(visitedViews)" :to="tag.path" :key="tag.path" @contextmenu.prevent.native="openMenu(tag,$event)">
+    <scroll-pane
+      class='tags-view-wrapper'
+      ref='scrollPane'
+    >
+      <router-link
+        ref='tag'
+        class="tags-view-item"
+        :class="isActive(tag)?'active':''"
+        v-for="tag in Array.from(visitedViews)"
+        :to="tag.path"
+        :key="tag.path"
+        @contextmenu.prevent.native="openMenu(tag,$event)"
+      ><i :class="isActive(tag)?'':generateTitleIcon(tag.title)"></i>
         {{generateTitle(tag.title)}}
-        <span class='el-icon-close' @click.prevent.stop='closeSelectedTag(tag)'></span>
+        <span
+          class='el-icon-close'
+          @click.prevent.stop='closeSelectedTag(tag)'
+        ></span>
       </router-link>
     </scroll-pane>
-    <ul class='contextmenu' v-show="visible" :style="{left:left+'px',top:top+'px'}">
+    <ul
+      class='contextmenu'
+      v-show="visible"
+      :style="{left:left+'px',top:top+'px'}"
+    >
       <li @click="closeSelectedTag(selectedTag)">{{$t('tags.close')}}</li>
       <li @click="closeOthersTags">{{$t('tags.closeothers')}}</li>
       <li @click="closeAllTags">{{$t('tags.closeall')}}</li>
@@ -56,6 +74,20 @@ export default {
         return this.$route
       }
       return false
+    },
+    generateTitleIcon(val) {
+      switch (val) {
+        case 'product':
+          return 'el-icon-third-product1'
+        case 'supplier':
+          return 'el-icon-third-gongyingshang'
+        case 'order':
+          return 'el-icon-third-dingdan'
+        case 'purchase':
+          return 'el-icon-third-icon-cart'
+        default:
+          break
+      }
     },
     isActive(route) {
       return route.path === this.$route.path || route.name === this.$route.name
@@ -119,7 +151,7 @@ export default {
     background: #fff;
     height: 34px;
     border-bottom: 1px solid #d8dce5;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .12), 0 0 3px 0 rgba(0, 0, 0, .04);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 0 3px 0 rgba(0, 0, 0, 0.04);
     .tags-view-item {
       display: inline-block;
       position: relative;
@@ -140,7 +172,7 @@ export default {
         color: #fff;
         border-color: #42b983;
         &::before {
-          content: '';
+          content: "";
           background: #fff;
           display: inline-block;
           width: 8px;
@@ -163,7 +195,7 @@ export default {
     font-size: 12px;
     font-weight: 400;
     color: #333;
-    box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, .3);
+    box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.3);
     li {
       margin: 0;
       padding: 7px 16px;
@@ -186,10 +218,10 @@ export default {
       vertical-align: 2px;
       border-radius: 50%;
       text-align: center;
-      transition: all .3s cubic-bezier(.645, .045, .355, 1);
+      transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
       transform-origin: 100% 50%;
       &:before {
-        transform: scale(.6);
+        transform: scale(0.6);
         display: inline-block;
         vertical-align: -3px;
       }

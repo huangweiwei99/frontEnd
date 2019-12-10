@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function fetchList(query) {
   return request({
-    url: '/supplier/list',
+    url: 'wms/suppliers',
     method: 'get',
     params: query
   })
@@ -10,7 +10,7 @@ export function fetchList(query) {
 
 export function createSupplier(data) {
   return request({
-    url: '/supplier/create',
+    url: 'wms/suppliers',
     method: 'post',
     data
   })
@@ -18,8 +18,23 @@ export function createSupplier(data) {
 
 export function updateSupplier(data) {
   return request({
-    url: '/supplier/update',
-    method: 'post',
+    url: 'wms/suppliers/' + data.id,
+    method: 'put',
+    data
+  })
+}
+
+export function deleteSupplier(data) {
+  return request({
+    url: 'wms/suppliers/' + data.id,
+    method: 'delete'
+  })
+}
+
+export function getSupplier(data) {
+  return request({
+    url: 'wms/suppliers/' + data.id,
+    method: 'get',
     data
   })
 }

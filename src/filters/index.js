@@ -52,6 +52,44 @@ export function parseTime(time, cFormat) {
   return time_str
 }
 
+export function parseOrderStatus(val) {
+  switch (val) {
+    case 1:
+      return '已同步'
+    case 2:
+      return '未处理'
+    case 3:
+      return '发货中'
+    case 4:
+      return '已发货'
+    case 5:
+      return '运输中'
+    case 6:
+      return '已签收'
+    case 7:
+      return '已完成'
+    default:
+      break
+  }
+}
+
+export function parseOrderStatusTag(val) {
+  switch (val) {
+    case 1:
+      return ''
+    case 2:
+      return 'danger'
+    case 3:
+      return 'warning'
+    case 4:
+      return 'info'
+    case 7:
+      return 'success'
+    default:
+      return 'success'
+  }
+}
+
 export function formatTime(time, option) {
   time = +time * 1000
   const d = new Date(time)
@@ -77,13 +115,30 @@ export function formatTime(time, option) {
 
 /* 数字 格式化*/
 export function nFormatter(num, digits) {
-  const si = [
-    { value: 1E18, symbol: 'E' },
-    { value: 1E15, symbol: 'P' },
-    { value: 1E12, symbol: 'T' },
-    { value: 1E9, symbol: 'G' },
-    { value: 1E6, symbol: 'M' },
-    { value: 1E3, symbol: 'k' }
+  const si = [{
+    value: 1E18,
+    symbol: 'E'
+  },
+  {
+    value: 1E15,
+    symbol: 'P'
+  },
+  {
+    value: 1E12,
+    symbol: 'T'
+  },
+  {
+    value: 1E9,
+    symbol: 'G'
+  },
+  {
+    value: 1E6,
+    symbol: 'M'
+  },
+  {
+    value: 1E3,
+    symbol: 'k'
+  }
   ]
   for (let i = 0; i < si.length; i++) {
     if (num >= si[i].value) {
@@ -102,4 +157,3 @@ export function html2Text(val) {
 export function toThousandslsFilter(num) {
   return (+num || 0).toString().replace(/^-?\d+/g, m => m.replace(/(?=(?!\b)(\d{3})+$)/g, ','))
 }
-
